@@ -15,7 +15,8 @@ var helper_admin = `OoO这里是linca喂养的人工智障琳
 .deban @某人 恢复其对bot使用权
 .auth @某人 授予其对bot管理权
 .authoff @某人 撤销其对bot管理权
-.bot on 开启bot`
+.bot on 开启bot
+.learn on 开启语料收集`
 
 var helper_user = `OoO这里是linca喂养的人工智障琳
 未封禁用户操作：
@@ -30,6 +31,7 @@ var helper_user = `OoO这里是linca喂养的人工智障琳
 甚至可以帮你们当面点大师
 ------
 测试性功能：
+.learn off 关闭语料收集
 .search [关键词] 查百度百科
 .reply [句首] ai生成一句话
 琳酱说说话 也是ai生成一句话

@@ -113,6 +113,7 @@ function write_database() {
 function enter_new_group(e) {
     if (groups[e.group_id] == undefined) {
         groups[e.group_id] = {
+            learn: false,
             boton: true,
             admins: {},
             bans: {},
@@ -299,14 +300,25 @@ async function process_groupmsg(e) {
             ]
             msg_say(e, saying_msg, 100);
         }
+        if (e.raw_message == ".learn on") {
+            groups[e.group_id].learn = true;
+            msg_say(e, "bot 语料收集打开", 100);
+            return;
+        }
 
     }
 
     if (user_on_accesslist(e)){
-        add_saying(e);
+        
+        if (groups[e.group_id].learn) { add_saying(e); }
         if (e.raw_message == ".bot off") {
             groups[e.group_id].boton = false;
             msg_say(e, "bot 关闭", 100);
+            return;
+        }
+        if (e.raw_message == ".learn off") {
+            groups[e.group_id].learn = false;
+            msg_say(e, "bot 语料收集关闭", 100);
             return;
         }
 
@@ -505,6 +517,7 @@ async function process_groupmsg(e) {
             if (e.raw_message == ".rand 琳酱是人工智障" || e.raw_message == ".randnoid 琳酱是人工智障") {
 
                 msg_say(e, "琳酱不是人工智障呜呜呜，琳酱是人工智障的概率是0%", 1000);
+                return;
 
             }
             
