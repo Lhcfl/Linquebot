@@ -65,19 +65,20 @@ class Node {
      * Update the possibility of the node with the occurance of the word.
      *
      * @param {string} word the incoming word
+     * @param {number} weight the weight of the incoming word
      *
      * @returns {void}
      */
-    update(word) {
+    update(word, weight = 1) {
         let id = this.next.indexOf(word);
         if (id == -1) {
             this.next.push(word);
-            this.occur.push(1);
+            this.occur.push(weight);
         }
         else {
-            this.occur[id] += 1;
+            this.occur[id] += weight;
         }
-        this.totoccur += 1;
+        this.totoccur += weight;
     }
 
     /**
@@ -137,15 +138,16 @@ class Markov {
      * Feed a sentence into the chain and update the chain.
      *
      * @param {string} sentence The origin sentence
+     * @param {number} weight The weight of the sentence
      *
      * @returns {void}
      */
-    feedSentence(sentence) {
+    feedSentence(sentence, weight = 1) {
         const update = (pre, word) => {
             if (!this.sm.has(pre)) {
                 this.sm.set(pre, new Node());
             }
-            this.sm.get(pre).update(word);
+            this.sm.get(pre).update(word, weight);
         };
         let words = Markov.splitWords(sentence);
         if (words.length == 1)  // Only terminator...
