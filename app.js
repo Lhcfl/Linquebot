@@ -2,7 +2,7 @@
 // 读取配置和模块
 import fs from "fs";
 import yaml from "js-yaml";
-import { Markov } from "./Markov.js";
+import { Markov } from "./components/Markov.js";
 import { createClient, segment } from "oicq";
 
 let setting_data = yaml.load(fs.readFileSync('./settings.yml'));
@@ -34,10 +34,10 @@ client.on("system.login.qrcode", function () {
 
 
 // 函数区
-import { get_hitokoto } from "./hitokoto.js";
+import { get_hitokoto } from "./components/hitokoto.js";
 import { generate_pat_seni } from "./generater/generate_pat_seni.js";
 import { rand_emo } from "./generater/rand_emo.js";
-import { baike } from "./baike.js";
+import { baike } from "./components/baike.js";
 import { rand_unsure } from "./generater/rand_unsure.js";
 import { translate_fwdbot } from "./generater/translate_fwdbot.js";
 import { generate_feed_food } from "./generater/generate_feed_food.js";
@@ -97,7 +97,7 @@ function write_database() {
         }
     });
     if (Math.random() < 0.001) {
-        fs.writeFile('libs/sayings' + String(Math.random()) + ".bak.json", JSON.stringify(sayings),  function(err) {
+        fs.writeFile('libs/sayings' + (new Date()).toISOString() + ".bak.json", JSON.stringify(sayings),  function(err) {
             if (err) {
                 return console.error(err);
             }
@@ -219,11 +219,12 @@ async function process_groupmsg(e) {
     if (group_on_accesslist(e) != true) { return; }
 
     if (e.raw_message == ".bot status") {
-        if (groups[e.group_id].boton) {
-            msg_say(e, "bot处于打开状态", 100);
-        } else {
-            msg_say(e, "bot处于关闭状态", 100);
-        }
+
+        msg_say(e,
+            (groups[e.group_id].boton ? "bot处于打开状态" : "bot处于关闭状态") + "\n" +
+            (groups[e.group_id].learn ? "bot正在学习语料" : "bot没在学习语料")
+            ,100);
+
     }
     if (e.raw_message == ".status") {
         const saying_msg = [
