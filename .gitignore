@@ -2,3 +2,5 @@
 /node_modules
 settings.yml
 /libs/*
+# Compatible for all build systems
+package-lock.json
