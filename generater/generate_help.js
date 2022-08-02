@@ -3,6 +3,7 @@ var helper =`OoO这里是linca喂养的人工智障琳
 .bot status输出bot状态（显然bot未开机则不会输出）
 .status输出您的状态
 对于未封禁用户：
+以.开头的任何句子会被bot语料收集忽略
 .help输出此条帮助信息
 .help user输出您可以执行的操作
 .help admin输出管理员操作`
