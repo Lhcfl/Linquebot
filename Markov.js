@@ -128,7 +128,7 @@ class Markov {
      * @returns {string[]} The words split
      */
     static splitWords(sentence) {
-        const regex = /\p{sc=Han}|[a-zA-Z-]+|[0-9]+|[,.:;"'/?<>()（）!~，。！；？：、]|……/gu;
+        const regex = /\p{sc=Han}|\p{sc=Hira}|\p{sc=Kana}|[a-zA-Z-]+|[0-9]+|[,.:;"'/?<>()（）!~，。！；？：、]|……/gu;
         let res = [...sentence.matchAll(regex)].map(v => v[0]);
         res.push("");
         return res;
