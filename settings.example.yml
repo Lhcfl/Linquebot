@@ -1,0 +1,16 @@
+# 复制它，改成settings.yml
+
+account: 123456789 # 你的bot账号
+bot_owner: 114514 # 作为bot拥有者的你的账号
+
+senioria: 1234567 # 是seni的账号（x
+
+
+whitelist: true # 白名单还是黑名单
+
+whitelist_groups: # 白名单
+  - 114514 # 群1
+  - 1919810 # 群2
+
+blacklist_groups: #黑名单群
+  - 19260917 # 群3
