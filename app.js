@@ -34,13 +34,13 @@ client.on("system.login.qrcode", function () {
 
 // 函数区
 import { get_hitokoto } from "./components/hitokoto.js";
-import { generate_pat_seni } from "./generater/generate_pat_seni.js";
-import { rand_emo } from "./generater/rand_emo.js";
+import { generate_pat_seni } from "./helper/generate_pat_seni.js";
+import { rand_emo } from "./helper/rand_emo.js";
 import { baike } from "./components/baike.js";
-import { rand_unsure } from "./generater/rand_unsure.js";
-import { translate_fwdbot } from "./generater/translate_fwdbot.js";
-import { generate_feed_food } from "./generater/generate_feed_food.js";
-import { generate_help, generate_help_admin, generate_help_user } from "./generater/generate_help.js";
+import { rand_unsure } from "./helper/rand_unsure.js";
+import { translate_fwdbot } from "./helper/translate_fwdbot.js";
+import { generate_feed_food } from "./helper/generate_feed_food.js";
+import { generate_help, generate_help_admin, generate_help_user } from "./helper/generate_help.js";
 import { say_rand_select } from "./helper/say_rand_select.js";
 
 /**
@@ -383,15 +383,24 @@ async function process_groupmsg(e) {
             } else if (e.raw_message.indexOf("吗") != -1 || e.raw_message.indexOf("？") != -1 ) {
                 msg_say(e, rand_unsure(), 500);
             } else {
-                msg_say(e, "pwq");
+                const msglist = [
+                    [0.2, ["pwq"]],
+                    [0.2, ["qwp"]],
+                    [0.2, ["pwq"]],
+                    [0.2, ["pwp"]],
+                    [0.2, ["quq"]],
+                    [0.2, ["qup"]],
+                    [0.2, ["qaq"]],
+                    [0.2, ["quq"]],
+                    [0.2, ["qeq"]],
+                ];
+                say_rand_select((msg, delay) => msg_say(e, msg, delay), msglist);    
             }
 
         } else {
 
             if (e.raw_message == "pwq") {
-                if(Math.random()<0.5) {
-                    msg_say(e, "pwq");
-                }
+                msg_say(e, "pwq", 1000);
             }
             else if (e.message[0].file == 'ba0be33ac52963615856444798b9288625592-200-200.gif') {
                 const msglist = [
@@ -420,7 +429,7 @@ async function process_groupmsg(e) {
             }
             else {
                 const msglist = [
-                    // Lazy evaluate the image loading ><
+                    // Lazy evaluate the image loading >_< (Super small voice (Be killed (Run away
                     [0.02, () => [[segment.image("./tmp/emo1.jpg")]]],
                     [0.01, () => [[segment.image("./tmp/emo2.jpg")]]],
                     [0.01, () => [[segment.image("./tmp/emo3.jpg")]]],
@@ -433,7 +442,7 @@ async function process_groupmsg(e) {
                     [0.01, ["嗯……"]],
                     [0.01, ["www"]],
                 ];
-                say_rand_select((msg, delay) => msg_say(e, msg, delay), msglist, 0.01);
+                say_rand_select((msg, delay) => msg_say(e, msg, delay), msglist);
             }
 
 
