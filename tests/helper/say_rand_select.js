@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "assert";
-import { say_rand_select } from "../../helper/say_rand_select.js"
+import { say_rand_linear } from "../../helper/say_rand.js"
 
 test("say something", () => {
     let data = [];
@@ -19,23 +19,23 @@ test("say something", () => {
     let p;
     Math.random = () => p;
     p = 1;
-    assert.strictEqual(say_rand_select(check_eq(0, 1), data.map(v => [2, v])), true);
+    assert.strictEqual(say_rand_linear(check_eq(0, 1), data.map(v => [2, v])), true);
     p = 2;
-    assert.strictEqual(say_rand_select(check_eq(4, 5), data.map(v => [2, v])), false);
+    assert.strictEqual(say_rand_linear(check_eq(4, 5), data.map(v => [2, v])), false);
 
     Math.random = () => {
         p = p - 1;
         return p;
     };
     p = 9;  // 9 - 4 = 5
-    assert.strictEqual(say_rand_select(check_eq(5, 6), data.map(v => [4, v])), true);
+    assert.strictEqual(say_rand_linear(check_eq(5, 6), data.map(v => [4, v])), true);
     p = 10;  // 10 - 0 = 10, not found
-    assert.strictEqual(say_rand_select(check_eq(5, 6), data.map(v => [0, v])), false);
+    assert.strictEqual(say_rand_linear(check_eq(5, 6), data.map(v => [0, v])), false);
 });
 
 test("test function", () => {
     Math.random = () => 0;
-    say_rand_select((a, b) => {
+    say_rand_linear((a, b) => {
         if (a != 0 || b != 1)
             throw Error(`not eq: expect 0, 1, got ${a}, ${b}`);
     }, [[1, () => [0, 1]], [1, [1, 2]], [1, [2, 3]]]);

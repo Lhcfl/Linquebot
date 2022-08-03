@@ -393,8 +393,8 @@ async function process_groupmsg(e) {
                     [3, ["qaq"]],
                     [4, ["quq"]],
                     [1, ["qeq"]],
-                ];
-                say_rand_equal((msg, delay) => msg_say(e, msg, 1000), msglist, 1);    
+                ].map(msg => {msg[1].push(1000); return msg;})
+                say_rand_equal((msg, delay) => msg_say(e, msg, delay), msglist, 1);    
             }
 
         } else {
