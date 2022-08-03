@@ -395,15 +395,15 @@ async function process_groupmsg(e) {
             }
             else if (e.message[0].file == 'ba0be33ac52963615856444798b9288625592-200-200.gif') {
                 const msglist = [
-                    ["摸摸……"],
-                    ["摸摸……（超小声"],
-                    () => [generate_pat_seni()],
-                    ["揉揉揉……"],
-                    ["patpat……（超小声"],
-                    ["贴贴……"],
-                    ["sigh，揉揉的说……（超小声"],
+                    [0.2, ["摸摸……"]],
+                    [0.2, ["摸摸……（超小声"]],
+                    [0.2, () => [generate_pat_seni()]],
+                    [0.2, ["揉揉揉……"]],
+                    [0.2, ["patpat……（超小声"]],
+                    [0.2, ["贴贴……"]],
+                    [0.2, ["sigh，揉揉的说……（超小声"]],
                 ];
-                say_rand_select((msg, delay) => msg_say(e, msg, delay), msglist, 0.2);
+                say_rand_select((msg, delay) => msg_say(e, msg, delay), msglist);
             }
 
             else if (e.sender.user_id == setting_data.senioria){
@@ -418,25 +418,20 @@ async function process_groupmsg(e) {
                 }
 
             }
-            else if(Math.random()<0.02) {
-                const saying_msg = [
-                    segment.image("./tmp/emo1.jpg"),
-                ]
-                msg_say(e, saying_msg);
-            }
             else {
                 const msglist = [
                     // Lazy evaluate the image loading ><
-                    () => [[segment.image("./tmp/emo2.jpg")]],
-                    () => [[segment.image("./tmp/emo3.jpg")]],
-                    () => [[segment.image("./tmp/jumpjump.gif")]],
-                    () => [[segment.image("./tmp/diamao.gif")]],
-                    ["说得对"],
-                    ["确实"],
-                    ["是"],
-                    ["有道理"],
-                    ["嗯……"],
-                    ["www"],
+                    [0.02, () => [[segment.image("./tmp/emo1.jpg")]]],
+                    [0.01, () => [[segment.image("./tmp/emo2.jpg")]]],
+                    [0.01, () => [[segment.image("./tmp/emo3.jpg")]]],
+                    [0.01, () => [[segment.image("./tmp/jumpjump.gif")]]],
+                    [0.01, () => [[segment.image("./tmp/diamao.gif")]]],
+                    [0.01, ["说得对"]],
+                    [0.01, ["确实"]],
+                    [0.01, ["是"]],
+                    [0.01, ["有道理"]],
+                    [0.01, ["嗯……"]],
+                    [0.01, ["www"]],
                 ];
                 say_rand_select((msg, delay) => msg_say(e, msg, delay), msglist, 0.01);
             }
