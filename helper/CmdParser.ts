@@ -1,3 +1,6 @@
+// If there's any way `any`s can be replaced here, it would already been used.
+/*eslint @typescript-eslint/no-explicit-any: "off" */
+
 /**
  * The information about the command
  */
@@ -16,7 +19,7 @@ class CmdInfo {
  * A parser and dispatcher for the commands
  */
 export class CmdParser {
-    ctnt: [string, CmdInfo, (...args: string[]) => any][] = [];
+    ctnt: [string, CmdInfo, (env: any, ...args: string[]) => any][] = [];
 
     /**
      * Add a command into the parser
@@ -25,7 +28,7 @@ export class CmdParser {
      * @param config - The information of the command
      * @param fn - The processing function of the command
      */
-    cmd(name: string, config: CmdInfo, fn: (...args: string[]) => any) {
+    cmd(name: string, config: CmdInfo, fn: (env: any, ...args: string[]) => any) {
         this.ctnt.push([name, new CmdInfo(config), fn]);
     }
 
@@ -34,10 +37,10 @@ export class CmdParser {
      *
      * @param raw_msg - The raw message string
      */
-    parse(raw_msg: string): (() => any) | null {
+    parse(raw_msg: string): ((env: any) => any) | null {
         for (const [name, info, proc] of this.ctnt) {
             if (raw_msg.slice(0, name.length) == name) {
-                return function() {
+                return function(env) {
                     let rest = raw_msg.slice(name.length);
                     const args = [];
                     for (let i = 1; i < info.nargs; ++i) {
@@ -50,7 +53,7 @@ export class CmdParser {
                     }
                     if (rest.length > 0)
                         args.push(info.trim ? rest.trim() : rest);
-                    return proc(...args);
+                    return proc(env, ...args);
                 }
             }
         }
