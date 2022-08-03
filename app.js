@@ -198,7 +198,7 @@ function msg_say(e, words, typing_time = 3000) {
     if(Math.random()<0.1) { discount_seni(); }
 }
 
-cmd_user.cmd(".help ", {}, (e, part) => {
+cmd_user.cmd(".help", {}, (e, part = "") => {
     msg_say(e, generate_help(part), 500);
 });
 

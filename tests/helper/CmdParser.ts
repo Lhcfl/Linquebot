@@ -19,6 +19,7 @@ test("simple commands", () => {
     assert_eq(parser.parse("b  cdef gh  ")(1), "b 1: ' cdef gh  '");
     assert_eq(parser.parse("c   qaq qwq  abc def")(1), "c 1: 'qaq' 'qwq' 'abc def'");
     assert_eq(parser.parse("c 1 2 3")(1), "c 1: '1' '2' '3'");
+    assert_eq(parser.parse("c 1 2")(1), "c 1: '1' '2'");
     assert_eq(parser.parse("d")(1), "d 1: ");
     assert_eq(parser.parse("d ")(1), "d 1: ");
     assert_eq(parser.parse("e")(1), "e 1: ");

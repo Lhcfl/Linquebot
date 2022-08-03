@@ -53,7 +53,9 @@ export class CmdParser {
                     const args = [];
                     for (let i = 1; i < info.nargs; ++i) {
                         rest = rest.trimStart();
-                        const end = rest.indexOf(" ");
+                        let end = rest.indexOf(" ");
+                        if (end == -1)
+                            end = rest.length;
                         args.push(rest.slice(0, end));
                         rest = rest.slice(end).trimStart();
                         if (rest.length == 0)
