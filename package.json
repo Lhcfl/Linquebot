@@ -1,5 +1,10 @@
 {
   "type": "module",
+  "imports": {
+    "#root/*": {
+      "default": "./*"
+    }
+  },
   "dependencies": {
     "eslint": "^8.21.0",
     "cheerio": "^1.0.0-rc.12",
@@ -11,7 +16,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test $(find tests -name '*.js')"
   },
   "repository": {
     "type": "git",
