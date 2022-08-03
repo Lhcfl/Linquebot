@@ -236,7 +236,7 @@ async function process_groupmsg(e) {
         ]
         msg_say(e, saying_msg, 100);
     }
-    console.log(e);
+    // console.log(e);
     if (auth(e)) {
         console.log("-----\n鉴权的发言者");
         if (e.raw_message == ".bot cc") {
