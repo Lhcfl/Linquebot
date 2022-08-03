@@ -1,9 +1,19 @@
 {
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
     "env": {
         "node": true,
         "es6": true
     },
+    "ignorePatterns": [ "dist/*" ],
     "parserOptions": {
         "sourceType": "module",
         "ecmaVersion": "latest"
