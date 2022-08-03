@@ -11,7 +11,7 @@ jobs:
         with:
           node-version: 18
       - run: yarn install
-      - run: yarn run eslint --quiet . --ext js
+      - run: yarn lint
   test:
     runs-on: ubuntu-latest
     steps:
@@ -20,4 +20,5 @@ jobs:
         with:
           node-version: 18
       - run: yarn install
-      - run: yarn run test
+      - run: yarn build
+      - run: yarn test
