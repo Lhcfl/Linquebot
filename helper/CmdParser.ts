@@ -5,7 +5,10 @@
  * The information about the command
  */
 class CmdInfo {
-    /** How many arguments the command has */
+    /**
+     * How many arguments the command has.
+     * If is 0, than any more text is not allowed.
+     */
     nargs?: number = 1;
     /** Whether trim out the spaces around the rest args */
     trim?: boolean = true;
@@ -39,7 +42,12 @@ export class CmdParser {
      */
     parse(raw_msg: string): ((env: any) => any) | null {
         for (const [name, info, proc] of this.ctnt) {
-            if (raw_msg.slice(0, name.length) == name) {
+            if (info.nargs == 0) {
+                if (name == (info.trim ? raw_msg.trim() : raw_msg)) {
+                    return (env) => proc(env);
+                }
+            }
+            else if (raw_msg.slice(0, name.length) == name) {
                 return function(env) {
                     let rest = raw_msg.slice(name.length);
                     const args = [];
