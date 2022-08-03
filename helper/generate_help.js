@@ -64,9 +64,10 @@ const helper_fallback = `QxQ 找不到这部分帮助呢
  * @param {"" | "admin" | "user" | "hitokoto"} part - Which part of help message should be generated
  */
 export function generate_help(part) {
-    if (helper.indexOf(part) == -1) {
+    if (helper[part] == undefined) {
         return helper_fallback;
     } else {
         return helper[part];
     }
 }
+
