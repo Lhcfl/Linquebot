@@ -1,4 +1,6 @@
-var helper =`OoO这里是linca喂养的人工智障琳
+const helper = [];
+
+helper[""] =`OoO这里是linca喂养的人工智障琳
 对任意用户：
 .bot status输出bot状态（显然bot未开机则不会输出）
 .status输出您的状态
@@ -9,7 +11,7 @@ var helper =`OoO这里是linca喂养的人工智障琳
 .help admin输出管理员操作
 .help hitokoto查看「一言」的帮助`
 
-var helper_admin = `OoO这里是linca喂养的人工智障琳
+helper["admin"] = `OoO这里是linca喂养的人工智障琳
 管理员操作
 .bot clear清除bot历史
 .bot cc 撤回bot的上一句话
@@ -20,7 +22,7 @@ var helper_admin = `OoO这里是linca喂养的人工智障琳
 .bot on 开启bot
 .learn on 开启语料收集`
 
-var helper_user = `OoO这里是linca喂养的人工智障琳
+helper["user"] = `OoO这里是linca喂养的人工智障琳
 未封禁用户操作：
 .help输出此条帮助信息
 .bot off 关闭bot
@@ -39,7 +41,7 @@ var helper_user = `OoO这里是linca喂养的人工智障琳
 琳酱说说话 也是ai生成一句话
 使用测试功能请谨慎，可能对他人有影响。`
 
-var helper_hitokoto = `OoO这里是linca喂养的人工智障琳
+helper["hitokoto"] = `OoO这里是linca喂养的人工智障琳
 一言网（hitokoto.cn）创立于 2016 年，隶属于萌创团队，目前网站主要提供一句话服务。
 .hitokoto [参数]
 参数列表：
@@ -50,18 +52,21 @@ g：其他\th：影视\ti：诗词
 j：网易云\tk：哲学\tl：抖机灵
 访问一言的网站 https://hitokoto.cn/`
 
-export function generate_help () {
-    return helper;
-}
+const helper_fallback = `QxQ 找不到这部分帮助呢
+.help输出帮助总览
+.help user输出您可以执行的操作
+.help admin输出管理员操作
+.help hitokoto查看「一言」的帮助`;
 
-export function generate_help_admin () {
-    return helper_admin;
-}
-
-export function generate_help_user () {
-    return helper_user;
-}
-
-export function generate_help_hitokoto () {
-    return helper_hitokoto;
+/**
+ * Generate the help message
+ *
+ * @param {"" | "admin" | "user" | "hitokoto"} part - Which part of help message should be generated
+ */
+export function generate_help(part) {
+    if (helper.indexOf(part) == -1) {
+        return helper_fallback;
+    } else {
+        return helper[part];
+    }
 }
