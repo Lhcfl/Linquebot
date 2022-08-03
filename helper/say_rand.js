@@ -8,11 +8,13 @@
  * @returns {boolean} Whether said a message
  */
 export function say_rand_linear(msg_say, msglist) {
-    for (const [possibility, msg] of msglist) {
-        if (Math.random() < possibility) {
-            let send = msg instanceof Function ? msg() : msg;
-            msg_say.apply(msg_say, send);
-            return true;
+    for (const iter of msglist) {
+        if (Math.random() < iter[0]) {
+            let msgs = iter.slice(1, iter.length);
+            for (const msg of msgs) {
+                let send = msg instanceof Function ? msg() : msg;
+                msg_say.apply(msg_say, send);
+            }
         }
     }
     return false;

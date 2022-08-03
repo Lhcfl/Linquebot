@@ -435,10 +435,10 @@ async function process_groupmsg(e) {
                     [0.01, () => [[segment.image("./tmp/emo3.jpg")]]],
                     [0.01, () => [[segment.image("./tmp/jumpjump.gif")]]],
                     [0.01, () => [[segment.image("./tmp/diamao.gif")]]],
-                    [0.01, ["说得对"]],
-                    [0.01, ["确实"]],
+                    [0.02, ["说得对"]],
+                    [0.02, ["确实"]],
                     [0.01, ["是"]],
-                    [0.01, ["有道理"]],
+                    [0.02, ["有道理"]],
                     [0.01, ["嗯……"]],
                     [0.01, ["www"]],
                 ];
