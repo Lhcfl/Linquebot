@@ -1,4 +1,3 @@
-/*eslint no-dupe-else-if: "off" */
 // 读取配置和模块
 import fs from "fs";
 import yaml from "js-yaml";
@@ -42,6 +41,7 @@ import { rand_unsure } from "./generater/rand_unsure.js";
 import { translate_fwdbot } from "./generater/translate_fwdbot.js";
 import { generate_feed_food } from "./generater/generate_feed_food.js";
 import { generate_help, generate_help_admin, generate_help_user } from "./generater/generate_help.js";
+import { say_rand_select } from "./helper/say_rand_select.js";
 
 /**
  * 检查消息所在的群组是否启用了bot.
@@ -394,29 +394,16 @@ async function process_groupmsg(e) {
                 }
             }
             else if (e.message[0].file == 'ba0be33ac52963615856444798b9288625592-200-200.gif') {
-                if (Math.random()<0.2) {
-                    msg_say(e, "摸摸……");
-                }
-                else if (Math.random()<0.2) {
-                    msg_say(e, "摸摸……（超小声");
-                }
-                else if (Math.random()<0.2) {
-                    msg_say(e, generate_pat_seni());
-                }
-                else if (Math.random()<0.2) {
-                    msg_say(e, "揉揉揉……");
-                }
-                else if (Math.random()<0.2) {
-                    msg_say(e, "patpat……（超小声");
-                }
-
-                else if (Math.random()<0.2) {
-                    msg_say(e, "贴贴……");
-                }
-
-                else if (Math.random()<0.2) {
-                    msg_say(e, "sigh，揉揉的说……（超小声");
-                }
+                const msglist = [
+                    ["摸摸……"],
+                    ["摸摸……（超小声"],
+                    () => [generate_pat_seni()],
+                    ["揉揉揉……"],
+                    ["patpat……（超小声"],
+                    ["贴贴……"],
+                    ["sigh，揉揉的说……（超小声"],
+                ];
+                say_rand_select((msg, delay) => msg_say(e, msg, delay), msglist, 0.2);
             }
 
             else if (e.sender.user_id == setting_data.senioria){
@@ -437,36 +424,22 @@ async function process_groupmsg(e) {
                 ]
                 msg_say(e, saying_msg);
             }
-            else if(Math.random()<0.01) {
-                const saying_msg = [
-                    segment.image("./tmp/emo2.jpg"),
-                ]
-                msg_say(e, saying_msg);
+            else {
+                const msglist = [
+                    // Lazy evaluate the image loading ><
+                    () => [[segment.image("./tmp/emo2.jpg")]],
+                    () => [[segment.image("./tmp/emo3.jpg")]],
+                    () => [[segment.image("./tmp/jumpjump.gif")]],
+                    () => [[segment.image("./tmp/diamao.gif")]],
+                    ["说得对"],
+                    ["确实"],
+                    ["是"],
+                    ["有道理"],
+                    ["嗯……"],
+                    ["www"],
+                ];
+                say_rand_select((msg, delay) => msg_say(e, msg, delay), msglist, 0.01);
             }
-            else if(Math.random()<0.01) {
-                const saying_msg = [
-                    segment.image("./tmp/emo3.jpg"),
-                ]
-                msg_say(e, saying_msg);
-            }
-            else if(Math.random()<0.01) {
-                const saying_msg = [
-                    segment.image("./tmp/jumpjump.gif"),
-                ]
-                msg_say(e, saying_msg);
-            }
-            else if(Math.random()<0.01) {
-                const saying_msg = [
-                    segment.image("./tmp/diamao.gif"),
-                ]
-                msg_say(e, saying_msg);
-            }
-            else if(Math.random()<0.01) { msg_say(e, "说得对"); }
-            else if(Math.random()<0.01) { msg_say(e, "确实"); }
-            else if(Math.random()<0.01) { msg_say(e, "是"); }
-            else if(Math.random()<0.01) { msg_say(e, "有道理"); }
-            else if(Math.random()<0.01) { msg_say(e, "嗯……"); }
-            else if(Math.random()<0.01) { msg_say(e, "www"); }
 
 
             if (e.raw_message == ".help") {
