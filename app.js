@@ -41,7 +41,7 @@ import { rand_unsure } from "./helper/rand_unsure.js";
 import { translate_fwdbot } from "./helper/translate_fwdbot.js";
 import { generate_feed_food } from "./helper/generate_feed_food.js";
 import { generate_help, generate_help_admin, generate_help_user } from "./helper/generate_help.js";
-import { say_rand_select } from "./helper/say_rand_select.js";
+import { say_rand_equal, say_rand_linear } from "./helper/say_rand_select.js";
 
 /**
  * 检查消息所在的群组是否启用了bot.
@@ -183,7 +183,7 @@ function discount_seni() {
  *
  * @param {GroupMessageEvent} e
  */
-function msg_say(e, words, typing_time = 4000) {
+function msg_say(e, words, typing_time = 3000) {
     function say_a_sentense() {
         const pro_temp = e.group.sendMsg(words)
         Promise.all([pro_temp]).then((values) => {
@@ -394,7 +394,7 @@ async function process_groupmsg(e) {
                     [0.2, ["quq"]],
                     [0.2, ["qeq"]],
                 ];
-                say_rand_select((msg, delay) => msg_say(e, msg, delay), msglist);    
+                say_rand_linear((msg, delay) => msg_say(e, msg, delay), msglist);    
             }
 
         } else {
@@ -404,15 +404,15 @@ async function process_groupmsg(e) {
             }
             else if (e.message[0].file == 'ba0be33ac52963615856444798b9288625592-200-200.gif') {
                 const msglist = [
-                    [0.2, ["摸摸……"]],
-                    [0.2, ["摸摸……（超小声"]],
-                    [0.2, () => [generate_pat_seni()]],
-                    [0.2, ["揉揉揉……"]],
-                    [0.2, ["patpat……（超小声"]],
-                    [0.2, ["贴贴……"]],
-                    [0.2, ["sigh，揉揉的说……（超小声"]],
+                    [1, ["摸摸……"]],
+                    [1, ["摸摸……（超小声"]],
+                    [1, () => [generate_pat_seni()]],
+                    [1, ["揉揉揉……"]],
+                    [1, ["patpat……（超小声"]],
+                    [1, ["贴贴……"]],
+                    [1, ["sigh，揉揉的说……（超小声"]],
                 ];
-                say_rand_select((msg, delay) => msg_say(e, msg, delay), msglist);
+                say_rand_equal((msg, delay) => msg_say(e, msg, delay), msglist, 1);
             }
 
             else if (e.sender.user_id == setting_data.senioria){
@@ -442,7 +442,7 @@ async function process_groupmsg(e) {
                     [0.01, ["嗯……"]],
                     [0.01, ["www"]],
                 ];
-                say_rand_select((msg, delay) => msg_say(e, msg, delay), msglist);
+                say_rand_linear((msg, delay) => msg_say(e, msg, delay), msglist);
             }
 
 
