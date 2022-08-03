@@ -41,7 +41,7 @@ import { rand_unsure } from "./helper/rand_unsure.js";
 import { translate_fwdbot } from "./helper/translate_fwdbot.js";
 import { generate_feed_food } from "./helper/generate_feed_food.js";
 import { generate_help, generate_help_admin, generate_help_user } from "./helper/generate_help.js";
-import { say_rand_equal, say_rand_linear } from "./helper/say_rand_select.js";
+import { say_rand_equal, say_rand_linear } from "./helper/say_rand.js";
 
 /**
  * 检查消息所在的群组是否启用了bot.
@@ -384,17 +384,17 @@ async function process_groupmsg(e) {
                 msg_say(e, rand_unsure(), 500);
             } else {
                 const msglist = [
-                    [0.2, ["pwq"]],
-                    [0.2, ["qwp"]],
-                    [0.2, ["pwq"]],
-                    [0.2, ["pwp"]],
-                    [0.2, ["quq"]],
-                    [0.2, ["qup"]],
-                    [0.2, ["qaq"]],
-                    [0.2, ["quq"]],
-                    [0.2, ["qeq"]],
+                    [10, ["pwq"]],
+                    [3, ["qwp"]],
+                    [4, ["uwu"]],
+                    [1, ["pwp"]],
+                    [4, ["quq"]],
+                    [1, ["qup"]],
+                    [3, ["qaq"]],
+                    [4, ["quq"]],
+                    [1, ["qeq"]],
                 ];
-                say_rand_linear((msg, delay) => msg_say(e, msg, delay), msglist);    
+                say_rand_equal((msg, delay) => msg_say(e, msg, 1000), msglist, 1);    
             }
 
         } else {
