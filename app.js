@@ -3,6 +3,7 @@ import fs from "fs";
 import yaml from "js-yaml";
 import { Markov } from "./components/Markov.js";
 import { createClient, segment } from "oicq";
+import { CmdParser } from "./helper/CmdParser.js";
 
 let setting_data = yaml.load(fs.readFileSync('./settings.yml'));
 console.log(setting_data);
@@ -15,6 +16,7 @@ const account = setting_data.account;
 const bot_owner = setting_data.bot_owner;
 const client = createClient(account);
 let mk = new Markov();
+const cmd_user = new CmdParser();
 
 // 文件加载
 load_database();
@@ -40,7 +42,7 @@ import { baike } from "./components/baike.js";
 import { rand_unsure_list } from "./helper/rand_unsure_list.js";
 import { translate_fwdbot } from "./helper/translate_fwdbot.js";
 import { generate_feed_food } from "./helper/generate_feed_food.js";
-import { generate_help, generate_help_admin, generate_help_hitokoto, generate_help_user } from "./helper/generate_help.js";
+import { generate_help } from "./helper/generate_help.js";
 import { say_rand_equal, say_rand_linear } from "./helper/say_rand.js";
 
 /**
@@ -195,6 +197,10 @@ function msg_say(e, words, typing_time = 3000) {
     setTimeout(say_a_sentense, typing_time);
     if(Math.random()<0.1) { discount_seni(); }
 }
+
+cmd_user.cmd(".help ", {}, (e, part) => {
+    msg_say(e, generate_help(part), 500);
+});
 
 // client监控区
 
@@ -446,17 +452,9 @@ async function process_groupmsg(e) {
             }
 
 
-            if (e.raw_message == ".help") {
-                msg_say(e, generate_help(), 500);
-            }
-            if (e.raw_message == ".help user") {
-                msg_say(e, generate_help_user(), 500);
-            }
-            if (e.raw_message == ".help admin") {
-                msg_say(e, generate_help_admin(), 500);
-            }
-            if (e.raw_message == ".help hitokoto") {
-                msg_say(e, generate_help_hitokoto(), 500);
+            let parsed_cmd = cmd_user.parse(e.raw_message);
+            if (parsed_cmd) {
+                parsed_cmd(e);
             }
 
 
