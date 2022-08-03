@@ -21,15 +21,18 @@ export function say_rand_linear(msg_say, msglist) {
 
 export function say_rand_equal(msg_say, msglist, possibility) {
     let generated_msglist = [];
-    for (const [weight, msg] of msglist) {
-        for (let i = 1; i <= weight; i++) {
-            generated_msglist.push(msg);
+    for (const iter of msglist) {
+        // 不允许赋太高的权值，因为该过程会按照权重复制值
+        for (let i = 1; i <= iter[0]; i++) {
+            generated_msglist.push(iter.slice(1, iter.length));
         }
     }
     if (Math.random() < possibility) {
-        let msg = generated_msglist[Math.floor(Math.random() * generated_msglist.length)];
-        let send = msg instanceof Function ? msg() : msg;
-        msg_say.apply(msg_say, send);
+        let msgs = generated_msglist[Math.floor(Math.random() * generated_msglist.length)];
+        for (const msg of msgs) {
+            let send = msg instanceof Function ? msg() : msg;
+            msg_say.apply(msg_say, send);
+        }
         return true;
     }
     return false;

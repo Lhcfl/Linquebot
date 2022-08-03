@@ -37,7 +37,7 @@ import { get_hitokoto } from "./components/hitokoto.js";
 import { generate_pat_seni } from "./helper/generate_pat_seni.js";
 import { rand_emo } from "./helper/rand_emo.js";
 import { baike } from "./components/baike.js";
-import { rand_unsure } from "./helper/rand_unsure.js";
+import { rand_unsure_list } from "./helper/rand_unsure_list.js";
 import { translate_fwdbot } from "./helper/translate_fwdbot.js";
 import { generate_feed_food } from "./helper/generate_feed_food.js";
 import { generate_help, generate_help_admin, generate_help_hitokoto, generate_help_user } from "./helper/generate_help.js";
@@ -381,7 +381,7 @@ async function process_groupmsg(e) {
                 msg_say(e, "你才不是琳酱主人呢！", 500);
                 msg_say(e, "等等？好像你是？", 4000);
             } else if (e.raw_message.indexOf("吗") != -1 || e.raw_message.indexOf("？") != -1 ) {
-                msg_say(e, rand_unsure(), 500);
+                say_rand_equal((msg, delay) => msg_say(e, msg, delay), rand_unsure_list(), 1); 
             } else {
                 const msglist = [
                     [10, ["pwq"]],
@@ -393,8 +393,8 @@ async function process_groupmsg(e) {
                     [3, ["qaq"]],
                     [4, ["quq"]],
                     [1, ["qeq"]],
-                ].map(msg => {msg[1].push(1000); return msg;})
-                say_rand_equal((msg, delay) => msg_say(e, msg, delay), msglist, 1);    
+                ]
+                say_rand_equal((msg, delay = 1000) => msg_say(e, msg, delay), msglist, 1);    
             }
 
         } else {
