@@ -40,7 +40,7 @@ import { baike } from "./components/baike.js";
 import { rand_unsure } from "./helper/rand_unsure.js";
 import { translate_fwdbot } from "./helper/translate_fwdbot.js";
 import { generate_feed_food } from "./helper/generate_feed_food.js";
-import { generate_help, generate_help_admin, generate_help_user } from "./helper/generate_help.js";
+import { generate_help, generate_help_admin, generate_help_hitokoto, generate_help_user } from "./helper/generate_help.js";
 import { say_rand_equal, say_rand_linear } from "./helper/say_rand.js";
 
 /**
@@ -455,6 +455,9 @@ async function process_groupmsg(e) {
             if (e.raw_message == ".help admin") {
                 msg_say(e, generate_help_admin(), 500);
             }
+            if (e.raw_message == ".help hitokoto") {
+                msg_say(e, generate_help_hitokoto(), 500);
+            }
 
 
             if (e.raw_message == "揉揉bot") {
@@ -466,6 +469,13 @@ async function process_groupmsg(e) {
                 const hitokoto_obj = await get_hitokoto();
                 msg_say(e, hitokoto_obj.hitokoto + "\n ——" + hitokoto_obj.from, 1000);
             }
+
+            if (e.raw_message.slice(0, 10) == ".hitokoto ") {
+                const hitokoto_obj = await get_hitokoto(e.raw_message.slice(10, e.raw_message.length));
+                msg_say(e, hitokoto_obj.hitokoto + "\n ——" + hitokoto_obj.from, 1000);
+            }
+
+            
             if (e.raw_message == ".hitorino") {
                 msg_say(e, "是 .hitokoto 啦，hitorino跑路了pwq", 1000);
             }

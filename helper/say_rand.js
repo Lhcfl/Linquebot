@@ -18,15 +18,7 @@ export function say_rand_linear(msg_say, msglist) {
     return false;
 }
 
-/**
- * Iterate msglist, each has possibility to be selected, and say the selected one.
- *
- * @param {(msg: Sendable, delay?: number) => void} msg_say The function to say a message
- * @param {[Integer, ([Sendable, number?] | () => [Sendable, number?])][]} msglist The list of messages to be selected,
- * where the first item is the possibility to be selected, the second is the message.
- *
- * @returns {boolean} Whether said a message
- */
+
 export function say_rand_equal(msg_say, msglist, possibility) {
     let generated_msglist = [];
     for (const [weight, msg] of msglist) {
