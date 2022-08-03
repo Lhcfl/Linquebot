@@ -96,8 +96,8 @@ function write_database() {
             return console.error(err);
         }
     });
-    if (Math.random() < 0.001) {
-        fs.writeFile('libs/sayings' + (new Date()).toISOString() + ".bak.json", JSON.stringify(sayings),  function(err) {
+    if (Math.random() < 0.01) {
+        fs.writeFile('libs/sayings' + (new Date()).toISOString().slice(0,10) + ".bak.json", JSON.stringify(sayings),  function(err) {
             if (err) {
                 return console.error(err);
             }
@@ -162,7 +162,7 @@ function user_on_accesslist(e) {
 }
 
 function repeat(e) {
-    if (groups[e.group_id].preword1 == groups[e.group_id].preword2 && e.raw_message == groups[e.group_id].preword1 /*&& e.message[0].type == "text"*/) {
+    if (groups[e.group_id].preword1 == groups[e.group_id].preword2 && e.raw_message == groups[e.group_id].preword1 && (e.message[0].type == "text" || e.message[0].type == "image")) {
         groups[e.group_id].preword1 = "";
         groups[e.group_id].preword2 = "";
         msg_say(e, e.message, 300);

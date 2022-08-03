@@ -5,3 +5,4 @@ settings.yml
 /libs/*
 # Compatible for all build systems
 package-lock.json
+/run.bat
