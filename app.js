@@ -23,12 +23,20 @@ load_database();
 // 客户端登录
 client.on("system.online", () => console.log("Logged in!"));
 
-client.on("system.login.qrcode", function () {
-  console.log("扫码后按回车登录");
-  process.stdin.once("data", () => {
-    this.login();
-  })
-}).login();
+
+if (setting_data.QRCode){
+    client.on("system.login.qrcode", function () {
+        console.log("扫码后按回车登录");
+        process.stdin.once("data", () => {
+          this.login();
+        })
+    }).login();
+} else {
+    client.on("system.login.slider", function () {
+        console.log("输入ticket：")
+        process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
+    }).login(setting_data.password)
+}
 
 
 
@@ -42,7 +50,7 @@ import { translate_fwdbot } from "./helper/translate_fwdbot.js";
 import { generate_feed_food } from "./helper/generate_feed_food.js";
 import { generate_help } from "./helper/generate_help.js";
 import { say_rand_equal, say_rand_linear } from "./helper/say_rand.js";
-import { parse_cmd } from "helper/parse_cmd.js";
+import { parse_cmd } from "./helper/parse_cmd.js";
 
 /**
  * 检查消息所在的群组是否启用了bot.
@@ -464,14 +472,14 @@ async function process_groupmsg(e) {
                 ["揉揉bot", function() {
                     msg_say(e, "www也揉揉"+e.sender.nickname+"的说", 2000);
                 }],
-                [".hitokoto", res => {
+                [".hitokoto", async (res) => {
                     const hitokoto_obj = await get_hitokoto(res.left.slice(1, res.left.length));
                     msg_say(e, hitokoto_obj.hitokoto + "\n ——" + hitokoto_obj.from, 1000);
                 }],
                 [".hitorino", function() {
                     msg_say(e, "是 .hitokoto 啦，hitorino跑路了pwq", 1000);
                 }],
-                [".search ", res => {
+                [".search ", async (res) => {
                     const result = await baike(res.left);
                     msg_say(e, result.success ? result.text: "搜索失败：" + result.text, 10);
                 }],

@@ -6,10 +6,10 @@
  * 
  * @returns func's return
  */
-export function parse_cmd(rawmsg, cmdlist) {
+export async function parse_cmd(rawmsg, cmdlist) {
     for (const [cmd, func] of cmdlist) {
         if (rawmsg.slice(0, cmd.length) == cmd) {
-            return func({
+            return await func({
                 iter: cmd.length,
                 left: rawmsg.slice(cmd.length, rawmsg.length)
             });
