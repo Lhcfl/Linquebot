@@ -40,8 +40,9 @@ import { baike } from "./components/baike.js";
 import { rand_unsure_list } from "./helper/rand_unsure_list.js";
 import { translate_fwdbot } from "./helper/translate_fwdbot.js";
 import { generate_feed_food } from "./helper/generate_feed_food.js";
-import { generate_help, generate_help_admin, generate_help_hitokoto, generate_help_user } from "./helper/generate_help.js";
+import { generate_help } from "./helper/generate_help.js";
 import { say_rand_equal, say_rand_linear } from "./helper/say_rand.js";
+import { parse_cmd } from "helper/parse_cmd.js";
 
 /**
  * 检查消息所在的群组是否启用了bot.
@@ -218,110 +219,120 @@ async function process_groupmsg(e) {
     console.log(group_on_accesslist(e) ? " " : "未列入白名单或被列入黑名单的群");
     if (group_on_accesslist(e) != true) { return; }
 
-    if (e.raw_message == ".bot status") {
-
-        msg_say(e,
+    parse_cmd(e.raw_message, [
+        [".bot status", ()=>{
+            msg_say(e,
             (groups[e.group_id].boton ? "bot处于打开状态" : "bot处于关闭状态") + "\n" +
             (groups[e.group_id].learn ? "bot正在学习语料" : "bot没在学习语料")
-            ,100);
+            ,100);}
+        ],
+        [".status", function(){
+            const saying_msg = [
+                segment.at(e.sender.user_id),
+                "您的bot状态是：\n禁用：",
+                (groups[e.group_id].bans[e.sender.user_id] == true ? "是" : "否"),
+                "\n管理：",
+                (auth(e) ? "是" : "否"),
+            ]
+            msg_say(e, saying_msg, 100);
+        }]
+    ]);
 
-    }
-    if (e.raw_message == ".status") {
-        const saying_msg = [
-            segment.at(e.sender.user_id),
-            "您的bot状态是：\n禁用：",
-            (groups[e.group_id].bans[e.sender.user_id] == true ? "是" : "否"),
-            "\n管理：",
-            (auth(e) ? "是" : "否"),
-        ]
-        msg_say(e, saying_msg, 100);
-    }
-    // console.log(e);
     if (auth(e)) {
         console.log("-----\n鉴权的发言者");
-        if (e.raw_message == ".bot cc") {
-            if (groups[e.group_id].pre_said.length == 0) return;
-            console.log(groups[e.group_id]);
-            const pre_tmp = groups[e.group_id].pre_said[groups[e.group_id].pre_said.length -1]
-            
-            e.group.recallMsg(pre_tmp.seq, pre_tmp.rand);   
-            groups[e.group_id].pre_said = groups[e.group_id].pre_said.slice(0, groups[e.group_id].pre_said.length-1);
-        }
+        if (parse_cmd(e.raw_message, [
+            [".bot ", (res) => {
+                parse_cmd(res.left, [
+                    ["cc", function () {
+                        if (groups[e.group_id].pre_said.length == 0) return;
+                        console.log(groups[e.group_id]);
+                        const pre_tmp = groups[e.group_id].pre_said[groups[e.group_id].pre_said.length - 1]
 
-        if (e.raw_message == ".bot on") {
-            groups[e.group_id].boton = true;
-            msg_say(e, "bot 已打开", 100);
-
-        }
-
-        if (e.raw_message == ".bot clear") {
-            groups[e.group_id].pre_said = [];
-            msg_say(e, "已清除历史", 100);
-        }
-        if (e.raw_message == ".bot nuclear") {
-            msg_say(e, "boom！！！！！！", 100);
-        }
-
-        if (e.message[0].text == ".auth " && e.message[1] != undefined && e.message[1].type == "at") {
-            groups[e.group_id].admins[e.message[1].qq] = true;
-            const saying_msg = [
-                "已经对",
-                segment.at(e.message[1].qq),
-                "授予bot admin权限",
-            ]
-            msg_say(e, saying_msg, 100);
-        }
-
-        if (e.message[0].text == ".authoff " && e.message[1] != undefined && e.message[1].type == "at") {
-            groups[e.group_id].admins[e.message[1].qq] = false;
-            const saying_msg = [
-                "已经对",
-                segment.at(e.message[1].qq),
-                "撤销bot admin权限",
-            ]
-            msg_say(e, saying_msg, 100);
-        }
-
-        if (e.message[0].text == ".ban " && e.message[1] != undefined && e.message[1].type == "at") {
-            groups[e.group_id].bans[e.message[1].qq], true;
-            const saying_msg = [
-                "已经撤销",
-                segment.at(e.message[1].qq),
-                "的bot使用权限",
-            ]
-            msg_say(e, saying_msg, 100);
-        }
-
-        if (e.message[0].text == ".deban " && e.message[1] != undefined && e.message[1].type == "at") {
-            groups[e.group_id].bans[e.message[1].qq], false;
-            const saying_msg = [
-                "已经恢复",
-                segment.at(e.message[1].qq),
-                "的bot使用权限",
-            ]
-            msg_say(e, saying_msg, 100);
-        }
-        if (e.raw_message == ".learn on") {
-            groups[e.group_id].learn = true;
-            msg_say(e, "bot 语料收集打开", 100);
-            return;
-        }
-
+                        e.group.recallMsg(pre_tmp.seq, pre_tmp.rand);
+                        groups[e.group_id].pre_said = groups[e.group_id].pre_said.slice(0, groups[e.group_id].pre_said.length - 1);
+                    }],
+                    ["on", function() {
+                        groups[e.group_id].boton = true;
+                        msg_say(e, "bot 已打开", 100);
+                    }],
+                    ["clear", function() {
+                        groups[e.group_id].pre_said = [];
+                        msg_say(e, "已清除历史", 100);
+                    }],
+                    ["nuclear", function() {
+                        msg_say(e, "boom！！！！！！", 100);
+                    }]
+                ])
+            }],
+            [".auth ", function() {
+                if (e.message[1] != undefined && e.message[1].type == "at") {
+                    groups[e.group_id].admins[e.message[1].qq] = true;
+                    const saying_msg = [
+                        "已经对",
+                        segment.at(e.message[1].qq),
+                        "授予bot admin权限",
+                    ]
+                    msg_say(e, saying_msg, 100);
+                }
+            }],
+            [".authoff ", function() {
+                if (e.message[1] != undefined && e.message[1].type == "at") {
+                    groups[e.group_id].admins[e.message[1].qq] = false;
+                    const saying_msg = [
+                        "已经对",
+                        segment.at(e.message[1].qq),
+                        "撤销bot admin权限",
+                    ]
+                    msg_say(e, saying_msg, 100);
+                }
+            }],
+            [".ban ", function() {
+                if (e.message[1] != undefined && e.message[1].type == "at") {
+                    groups[e.group_id].bans[e.message[1].qq], true;
+                    const saying_msg = [
+                        "已经撤销",
+                        segment.at(e.message[1].qq),
+                        "的bot使用权限",
+                    ]
+                    msg_say(e, saying_msg, 100);
+                }
+            }],
+            [".deban ", function() {
+                if (e.message[1] != undefined && e.message[1].type == "at") {
+                    groups[e.group_id].bans[e.message[1].qq], false;
+                    const saying_msg = [
+                        "已经恢复",
+                        segment.at(e.message[1].qq),
+                        "的bot使用权限",
+                    ]
+                    msg_say(e, saying_msg, 100);
+                }
+            }],
+            [".learn off", function() {
+                groups[e.group_id].learn = true;
+                msg_say(e, "bot 语料收集打开", 100);
+                return -1;
+            }]
+        ]) == -1) { return; }
+    //auth user end
     }
 
     if (user_on_accesslist(e)){
         
         if (groups[e.group_id].learn) { add_saying(e); }
-        if (e.raw_message == ".bot off") {
-            groups[e.group_id].boton = false;
-            msg_say(e, "bot 关闭", 100);
-            return;
-        }
-        if (e.raw_message == ".learn off") {
-            groups[e.group_id].learn = false;
-            msg_say(e, "bot 语料收集关闭", 100);
-            return;
-        }
+        
+        if (parse_cmd(e.raw_message, [
+            [".bot off", function() {
+                groups[e.group_id].boton = false;
+                msg_say(e, "bot 关闭", 100);
+                return -1;
+            }],
+            [".learn off", function() {
+                groups[e.group_id].learn = false;
+                msg_say(e, "bot 语料收集关闭", 100);
+                return -1;
+            }]
+        ]) == -1) { return; }
 
         let someone_at_me = false;
         repeat(e);
@@ -397,6 +408,7 @@ async function process_groupmsg(e) {
                 say_rand_equal((msg, delay = 1000) => msg_say(e, msg, delay), msglist, 1);    
             }
 
+            // someone at me end
         } else {
 
             if (e.raw_message == "pwq") {
@@ -444,149 +456,105 @@ async function process_groupmsg(e) {
                 ];
                 say_rand_linear((msg, delay) => msg_say(e, msg, delay), msglist);
             }
-
-
-            if (e.raw_message == ".help") {
-                msg_say(e, generate_help(), 500);
-            }
-            if (e.raw_message == ".help user") {
-                msg_say(e, generate_help_user(), 500);
-            }
-            if (e.raw_message == ".help admin") {
-                msg_say(e, generate_help_admin(), 500);
-            }
-            if (e.raw_message == ".help hitokoto") {
-                msg_say(e, generate_help_hitokoto(), 500);
-            }
-
-
-            if (e.raw_message == "揉揉bot") {
-                msg_say(e, "www也揉揉"+e.sender.nickname+"的说", 2000);
-            }
-
-
-            if (e.raw_message == ".hitokoto") {
-                const hitokoto_obj = await get_hitokoto();
-                msg_say(e, hitokoto_obj.hitokoto + "\n ——" + hitokoto_obj.from, 1000);
-            }
-
-            if (e.raw_message.slice(0, 10) == ".hitokoto ") {
-                const hitokoto_obj = await get_hitokoto(e.raw_message.slice(10, e.raw_message.length));
-                msg_say(e, hitokoto_obj.hitokoto + "\n ——" + hitokoto_obj.from, 1000);
-            }
-
-            
-            if (e.raw_message == ".hitorino") {
-                msg_say(e, "是 .hitokoto 啦，hitorino跑路了pwq", 1000);
-            }
-
-
-            // 被舍弃的搜索版本
-            // if (e.raw_message.slice(0,8) == ".search ") {
-            //     keyword = e.raw_message.slice(8, e.raw_message.length)
-            //     search_e.once(keyword+ "get", function(results) {
-            //         console.log(results);
-            //         msg_say(e, results, 10);
-            //     });
-            //     make_search(keyword);
-            // }
-
-            if (e.raw_message.slice(0,8) == ".search ") {
-                const keyword = e.raw_message.slice(8, e.raw_message.length)
-                const result = await baike(keyword);
-                msg_say(e, result.success ? result.text: "搜索失败：" + result.text, 10);
-            }
-
-            if (e.raw_message == ".rand") {
-
-                msg_say(e, e.sender.nickname + " 掷出的概率是 " + String(Math.floor(Math.random()*100)) + "%", 1000);
-
-            }
-            if (e.raw_message == ".rand 琳酱是人工智障" || e.raw_message == ".randnoid 琳酱是人工智障") {
-
-                msg_say(e, "琳酱不是人工智障呜呜呜，琳酱是人工智障的概率是0%", 1000);
-                return;
-
-            }
-            
-
-            if (e.raw_message.slice(0,6) == ".rand ") {
-                msg_say(e,
-                    e.sender.nickname + " "
-                    + e.raw_message.slice(6, e.raw_message.length) + " 的概率是 "
-                    + String(Math.floor(Math.random()*100)) + "%"
-                    , 2000
-                );
-
-            }
-            if (e.raw_message.slice(0,10) == ".randnoid ") {
-                msg_say(e,
-                    e.raw_message.slice(10, e.raw_message.length) + " 的概率是 "
-                    + String(Math.floor(Math.random()*100)) + "%"
-                    , 2000
-                );
-
-            }
-
-            if (e.raw_message == "琳酱说说话") {
-                try{
-                    const temp_text = mk.genSentence("");
-                    console.log(temp_text);
-                    msg_say(e, temp_text, 1000);
-                } catch(err) {
-                    console.log(err);
-                }
-            }
-
-            if (e.raw_message.slice(0,7) == ".reply ") {
-                const tmp_a = String(e.raw_message.slice(7,e.raw_message.length));
-                console.log(tmp_a);
-                try{
-                    const temp_text = mk.genSentence(tmp_a);
-                    console.log(temp_text);
-                    msg_say(e, tmp_a + temp_text, 1000);
-                } catch(err) {
-                    console.log(err);
-                }
-            }
-
-            if (e.raw_message.slice(0,2) == "投喂") {
-                const msglist = generate_feed_food(e.raw_message.slice(2, e.raw_message.length));
-                for (const [saying, delay] of msglist) {
-                    msg_say(e, saying, delay);
-                }
-            }
-
-            if (e.raw_message.slice(0,2) == ". ") {
-                if (e.raw_message.indexOf("智障") != -1 && !auth(e) && e.raw_message.indexOf("不") == -1) {
-                    if (e.raw_message.indexOf("我") != -1 || e.raw_message.indexOf("琳酱") != -1) {
-                        msg_say(e, "不准你说我是人工智障！", 500);
-                        return;
+            // parse cmd start
+            if (parse_cmd(e.raw_message, [
+                [".help", res => {
+                    msg_say(e, generate_help(res.left), 500);
+                }],
+                ["揉揉bot", function() {
+                    msg_say(e, "www也揉揉"+e.sender.nickname+"的说", 2000);
+                }],
+                [".hitokoto", res => {
+                    const hitokoto_obj = await get_hitokoto(res.left.slice(1, res.left.length));
+                    msg_say(e, hitokoto_obj.hitokoto + "\n ——" + hitokoto_obj.from, 1000);
+                }],
+                [".hitorino", function() {
+                    msg_say(e, "是 .hitokoto 啦，hitorino跑路了pwq", 1000);
+                }],
+                [".search ", res => {
+                    const result = await baike(res.left);
+                    msg_say(e, result.success ? result.text: "搜索失败：" + result.text, 10);
+                }],
+                [".rand", res=> {
+                    if (res.left == "") { msg_say(e, e.sender.nickname + " 掷出的概率是 " + String(Math.floor(Math.random()*100)) + "%", 1000); }
+                    else if (res.left == " 琳酱是人工智障") {
+                        msg_say(e, "琳酱不是人工智障呜呜呜，琳酱是人工智障的概率是0%", 1000);
+                        return -1;
+                    } else {
+                        msg_say(e,
+                            e.sender.nickname + res.left + " 的概率是 "
+                            + String(Math.floor(Math.random()*100)) + "%"
+                            , 2000
+                        );
                     }
-                }
-                const end_punct = [",", "，", "。", "！", "!", "；", ";", "？", "?", "：", "……", "、", "."];
-                if (end_punct.indexOf(e.raw_message[e.raw_message.length - 1]) != -1) {
-                    msg_say(e,
-                        e.raw_message.slice(2, e.raw_message.length)
-                        + "嘟，琳酱" + rand_emo() + "地说。"
-                        , 500
-                    );
-                }
-                else {
-                    msg_say(e,
-                        e.raw_message.slice(2, e.raw_message.length)
-                        + "，嘟，琳酱" + rand_emo() + "地说。"
-                        , 500
-                    );
-                }
-            }
+                }],
+                [".randnoid ", res => {
+                    if (res.left == "琳酱是人工智障") {
+                        msg_say(e, "琳酱不是人工智障呜呜呜，琳酱是人工智障的概率是0%", 1000);
+                        return -1;
+                    } else {
+                        msg_say(e,
+                            res.left + " 的概率是 "
+                            + String(Math.floor(Math.random()*100)) + "%"
+                            , 2000
+                        );
+                    }
+                }],
+                ["琳酱说说话", function() {
+                    try{
+                        const temp_text = mk.genSentence("");
+                        console.log(temp_text);
+                        msg_say(e, temp_text, 1000);
+                    } catch(err) {
+                        console.log(err);
+                    }
+                }],
+                [".reply ", res => {
+                    console.log(res.left);
+                    try{
+                        const temp_text = mk.genSentence(res.left);
+                        console.log(temp_text);
+                        msg_say(e, res.left + temp_text, 1000);
+                    } catch(err) {
+                        console.log(err);
+                    }
+                }],
+                ["投喂", res => {
+                    const msglist = generate_feed_food(res.left);
+                    for (const [saying, delay] of msglist) {
+                        msg_say(e, saying, delay);
+                    }
+                }],
+                [". ", function() {
+                    if (e.raw_message.indexOf("智障") != -1 && !auth(e) && e.raw_message.indexOf("不") == -1) {
+                        if (e.raw_message.indexOf("我") != -1 || e.raw_message.indexOf("琳酱") != -1) {
+                            msg_say(e, "不准你说我是人工智障！", 500);
+                            return;
+                        }
+                    }
+                    const end_punct = [",", "，", "。", "！", "!", "；", ";", "？", "?", "：", "……", "、", "."];
+                    if (end_punct.indexOf(e.raw_message[e.raw_message.length - 1]) != -1) {
+                        msg_say(e,
+                            e.raw_message.slice(2, e.raw_message.length)
+                            + "嘟，琳酱" + rand_emo() + "地说。"
+                            , 500
+                        );
+                    }
+                    else {
+                        msg_say(e,
+                            e.raw_message.slice(2, e.raw_message.length)
+                            + "，嘟，琳酱" + rand_emo() + "地说。"
+                            , 500
+                        );
+                    }
+                }]
 
-
-        }
-
-
-
-    }
+            ]) == -1) { return }
+            //parse end
+        // !someone_at_me end
+        } 
+    //user on accesslist end
+    } 
     write_database();
 }
 

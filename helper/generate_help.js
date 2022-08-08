@@ -50,18 +50,28 @@ g：其他\th：影视\ti：诗词
 j：网易云\tk：哲学\tl：抖机灵
 访问一言的网站 https://hitokoto.cn/`
 
-export function generate_help () {
-    return helper;
+export function generate_help (type="") {
+    switch (type){
+        case "": 
+            return helper;
+        case " admin":
+            return helper_admin;
+        case " user":
+            return helper_user;
+        case " hitokoto":
+            return helper_hitokoto;
+    }
+    
 }
 
-export function generate_help_admin () {
-    return helper_admin;
-}
+// export function generate_help_admin () {
+//     return helper_admin;
+// }
 
-export function generate_help_user () {
-    return helper_user;
-}
+// export function generate_help_user () {
+//     return helper_user;
+// }
 
-export function generate_help_hitokoto () {
-    return helper_hitokoto;
-}
+// export function generate_help_hitokoto () {
+//     return helper_hitokoto;
+// }
