@@ -419,52 +419,6 @@ async function process_groupmsg(e) {
 
             // someone at me end
         } else {
-
-            if (e.raw_message == "pwq") {
-                msg_say(e, "pwq", 1000);
-            }
-            else if (e.message[0].file == 'ba0be33ac52963615856444798b9288625592-200-200.gif') {
-                const msglist = [
-                    [1, ["摸摸……"]],
-                    [1, ["摸摸……（超小声"]],
-                    [1, () => [generate_pat_seni()]],
-                    [1, ["揉揉揉……"]],
-                    [1, ["patpat……（超小声"]],
-                    [1, ["贴贴……"]],
-                    [1, ["sigh，揉揉的说……（超小声"]],
-                ];
-                say_rand_equal((msg, delay) => msg_say(e, msg, delay), msglist, 1);
-            }
-
-            else if (e.sender.user_id == setting_data.senioria){
-
-                if (e.message[0].file== '91bcacbf96b97489ff5f1d540d1d92dc110841-300-300.png') {
-                    msg_say(e, generate_pat_seni(), 300);
-                } else if(e.message[0].file==  'e587448ca4d53bfaae4e8ec894ab7a20197675-512-449.png') {
-                    msg_say(e, generate_pat_seni(), 300);
-                } else if (Math.random() < 0.15/senicount ) {
-                    msg_say(e, "seni强强（超小声（被打死");
-                    senicount+=2;
-                }
-
-            }
-            else {
-                const msglist = [
-                    // Lazy evaluate the image loading >_< (Super small voice (Be killed (Run away
-                    [0.02, () => [[segment.image("./tmp/emo1.jpg")]]],
-                    [0.01, () => [[segment.image("./tmp/emo2.jpg")]]],
-                    [0.01, () => [[segment.image("./tmp/emo3.jpg")]]],
-                    [0.01, () => [[segment.image("./tmp/jumpjump.gif")]]],
-                    [0.01, () => [[segment.image("./tmp/diamao.gif")]]],
-                    [0.02, ["说得对"]],
-                    [0.02, ["确实"]],
-                    [0.01, ["是"]],
-                    [0.02, ["有道理"]],
-                    [0.01, ["嗯……"]],
-                    [0.01, ["www"]],
-                ];
-                say_rand_linear((msg, delay) => msg_say(e, msg, delay), msglist);
-            }
             // parse cmd start
             if (parse_cmd(e.raw_message, [
                 [".help", res => {
@@ -564,6 +518,84 @@ async function process_groupmsg(e) {
 
             ]) == -1) { return }
             //parse end
+
+            if (e.raw_message == "pwq") {
+                msg_say(e, "pwq", 1000);
+            }
+            else if (e.message[0].file == 'ba0be33ac52963615856444798b9288625592-200-200.gif') {
+                const msglist = [
+                    [1, ["摸摸……"]],
+                    [1, ["摸摸……（超小声"]],
+                    [1, () => [generate_pat_seni()]],
+                    [1, ["揉揉揉……"]],
+                    [1, ["patpat……（超小声"]],
+                    [1, ["贴贴……"]],
+                    [1, ["sigh，揉揉的说……（超小声"]],
+                ];
+                say_rand_equal((msg, delay) => msg_say(e, msg, delay), msglist, 1);
+            }
+
+            else if (e.sender.user_id == setting_data.senioria){
+
+                if (e.message[0].file== '91bcacbf96b97489ff5f1d540d1d92dc110841-300-300.png') {
+                    msg_say(e, generate_pat_seni(), 300);
+                } else if(e.message[0].file==  'e587448ca4d53bfaae4e8ec894ab7a20197675-512-449.png') {
+                    msg_say(e, generate_pat_seni(), 300);
+                } else if (Math.random() < 0.15/senicount ) {
+                    msg_say(e, "seni强强（超小声（被打死");
+                    senicount+=2;
+                }
+
+            }
+            else if (e.raw_message.indexOf("琳酱") != -1) {
+                if (e.raw_message.indexOf("智障") != -1 || e.raw_message.indexOf("傻") != -1 && e.raw_message.indexOf("不") == -1) {
+                    const msglist = [
+                        // Lazy evaluate the image loading >_< (Super small voice (Be killed (Run away
+                        [0.05, () => [[segment.image("./tmp/emo1.jpg")]]],
+                        [0.03, () => [[segment.image("./tmp/emo2.jpg")]]],
+                        [0.05, () => [[segment.image("./tmp/emo3.jpg")]]],
+                        [0.02, ["az"]],
+                        [0.05, ["啊这"]],
+                        [0.03, ["不是"]],
+                        [0.04, ["啊呜？"]],
+                        [0.04, ["呜呜？？"]],
+                    ];
+                    say_rand_linear((msg, delay) => msg_say(e, msg, delay), msglist);
+                } else {
+                    const msglist = [
+                        // Lazy evaluate the image loading >_< (Super small voice (Be killed (Run away
+                        [0.02, () => [[segment.image("./tmp/emo1.jpg")]]],
+                        [0.005, () => [[segment.image("./tmp/emo2.jpg")]]],
+                        [0.01, () => [[segment.image("./tmp/emo3.jpg")]]],
+                        [0.02, () => [[segment.image("./tmp/jumpjump.gif")]]],
+                        [0.01, () => [[segment.image("./tmp/diamao.gif")]]],
+                        [0.02, ["说得对"]],
+                        [0.03, ["确实"]],
+                        [0.03, ["是"]],
+                        [0.02, ["有道理"]],
+                        [0.01, ["嗯"]],
+                        [0.01, ["www"]],
+                    ];
+                    say_rand_linear((msg, delay) => msg_say(e, msg, delay), msglist);
+                }
+            } else {
+                const msglist = [
+                    // Lazy evaluate the image loading >_< (Super small voice (Be killed (Run away
+                    [0.02, () => [[segment.image("./tmp/emo1.jpg")]]],
+                    [0.01, () => [[segment.image("./tmp/emo2.jpg")]]],
+                    [0.01, () => [[segment.image("./tmp/emo3.jpg")]]],
+                    [0.01, () => [[segment.image("./tmp/jumpjump.gif")]]],
+                    [0.01, () => [[segment.image("./tmp/diamao.gif")]]],
+                    [0.02, ["说得对"]],
+                    [0.02, ["确实"]],
+                    [0.01, ["是"]],
+                    [0.02, ["有道理"]],
+                    [0.01, ["嗯……"]],
+                    [0.01, ["www"]],
+                ];
+                say_rand_linear((msg, delay) => msg_say(e, msg, delay), msglist);
+            }
+            
         // !someone_at_me end
         } 
     //user on accesslist end
