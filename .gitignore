@@ -2,7 +2,7 @@
 /dist
 /node_modules
 settings.yml
-/libs/*
+/libs
 # Compatible for all build systems
 package-lock.json
 /run.bat
