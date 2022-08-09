@@ -484,6 +484,18 @@ async function process_groupmsg(e) {
                     const result = await baike(res.left);
                     msg_say(e, result.success ? result.text: "搜索失败：" + result.text, 10);
                 }],
+                [".randnoid ", res => {
+                    if (res.left == "琳酱是人工智障") {
+                        msg_say(e, "琳酱不是人工智障呜呜呜，琳酱是人工智障的概率是0%", 1000);
+                        return -1;
+                    } else {
+                        msg_say(e,
+                            res.left + " 的概率是 "
+                            + String(Math.floor(Math.random()*100)) + "%"
+                            , 2000
+                        );
+                    }
+                }],
                 [".rand", res=> {
                     if (res.left == "") { msg_say(e, e.sender.nickname + " 掷出的概率是 " + String(Math.floor(Math.random()*100)) + "%", 1000); }
                     else if (res.left == " 琳酱是人工智障") {
@@ -492,18 +504,6 @@ async function process_groupmsg(e) {
                     } else {
                         msg_say(e,
                             e.sender.nickname + res.left + " 的概率是 "
-                            + String(Math.floor(Math.random()*100)) + "%"
-                            , 2000
-                        );
-                    }
-                }],
-                [".randnoid ", res => {
-                    if (res.left == "琳酱是人工智障") {
-                        msg_say(e, "琳酱不是人工智障呜呜呜，琳酱是人工智障的概率是0%", 1000);
-                        return -1;
-                    } else {
-                        msg_say(e,
-                            res.left + " 的概率是 "
                             + String(Math.floor(Math.random()*100)) + "%"
                             , 2000
                         );
