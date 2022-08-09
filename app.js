@@ -51,6 +51,7 @@ import { generate_feed_food } from "./helper/generate_feed_food.js";
 import { generate_help } from "./helper/generate_help.js";
 import { say_rand_equal, say_rand_linear } from "./helper/say_rand.js";
 import { parse_cmd } from "./helper/parse_cmd.js";
+import { get_tarot } from "components/tarot.js";
 
 /**
  * 检查消息所在的群组是否启用了bot.
@@ -555,6 +556,10 @@ async function process_groupmsg(e) {
                             , 500
                         );
                     }
+                }],
+                [".tarot", res => {
+                    msg_say(e,`${e.sender.nickname}最近遇到了什么烦心事吗？让琳酱给你算一算`, 500);
+                    msg_say(e,`${e.sender.nickname}抽到的牌组是：\n${get_tarot(res.left)}`, 4000);
                 }]
 
             ]) == -1) { return }
