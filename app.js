@@ -317,7 +317,7 @@ async function process_groupmsg(e) {
                     msg_say(e, saying_msg, 100);
                 }
             }],
-            [".learn off", function() {
+            [".learn on", function() {
                 groups[e.group_id].learn = true;
                 msg_say(e, "bot 语料收集打开", 100);
                 return -1;
