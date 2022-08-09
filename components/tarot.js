@@ -34,7 +34,7 @@ export function get_tarot(arg = "") {
     if (num <= 0) { num = 1 }
     if (num >= 5) { return "不行，你点的牌太多啦！"; }
     let res = get_one_tarot();
-    for (let i = 1; i<=num; i++) {
+    for (let i = 2; i<=num; i++) {
         res += "\n" + get_one_tarot();
     }
     return res;
