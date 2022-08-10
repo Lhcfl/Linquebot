@@ -533,6 +533,9 @@ async function process_groupmsg(e) {
                 ["琳酱说说话", function() {
                     
                     loves[e.sender.user_id].data += 0.01;
+                    if (sayings == []) {
+                        msg_say(e, "错误：琳酱的语料库为空。请使用 .learn on 给琳酱投喂语料", 1000);
+                    }
                     try{
                         const temp_text = mk.genSentence("");
                         console.log(temp_text);
@@ -545,6 +548,9 @@ async function process_groupmsg(e) {
                     
                     loves[e.sender.user_id].data += 0.01;
                     console.log(res.left);
+                    if (sayings == []) {
+                        msg_say(e, "错误：琳酱的语料库为空。请使用 .learn on 给琳酱投喂语料", 1000);
+                    }
                     try{
                         const temp_text = mk.genSentence(res.left);
                         console.log(temp_text);

@@ -1,5 +1,5 @@
 import fs from "fs";
-let tarots = JSON.parse(fs.readFileSync('./components/tarots.json'))
+let tarots = JSON.parse(fs.readFileSync('./components/lib/tarots.json'));
 
 /**
  * 获得单张不重复塔罗牌
