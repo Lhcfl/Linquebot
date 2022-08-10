@@ -205,6 +205,21 @@ function discount_seni() {
     }
 }
 
+// x:e.sender.user_id
+function upd_loves(e) {
+    if (loves[e.sender.user_id] == undefined) {
+        loves[e.sender.user_id] = {
+            data: 0,
+            feed_date: 0,
+            pat_date: 0,
+            biaobai: false
+        };
+        if (auth(e)) {
+            loves[e.sender.user_id].data = 10;
+        }
+    }
+}
+
 /**
  * 让bot说一句话
  *
@@ -293,6 +308,7 @@ async function process_groupmsg(e) {
             [".authoff ", function() {
                 if (e.message[1] != undefined && e.message[1].type == "at") {
                     groups[e.group_id].admins[e.message[1].qq] = false;
+                    loves[e.sender.user_id].data -= 10;
                     const saying_msg = [
                         "已经对",
                         segment.at(e.message[1].qq),
@@ -304,6 +320,7 @@ async function process_groupmsg(e) {
             [".auth ", function() {
                 if (e.message[1] != undefined && e.message[1].type == "at") {
                     groups[e.group_id].admins[e.message[1].qq] = true;
+                    loves[e.sender.user_id].data += 10;
                     const saying_msg = [
                         "已经对",
                         segment.at(e.message[1].qq),
@@ -315,6 +332,7 @@ async function process_groupmsg(e) {
             [".ban ", function() {
                 if (e.message[1] != undefined && e.message[1].type == "at") {
                     groups[e.group_id].bans[e.message[1].qq], true;
+                    loves[e.sender.user_id].data -= 20;
                     const saying_msg = [
                         "已经撤销",
                         segment.at(e.message[1].qq),
@@ -371,12 +389,15 @@ async function process_groupmsg(e) {
 
         if (someone_at_me) {
             if (e.message.length == 1) {
+                loves[e.sender.user_id].data += 0.1;
                 msg_say(e, e.sender.nickname +"~ 找我有事吗~");
             } else if (e.raw_message.indexOf("说确实") != -1 ) {
                 msg_say(e, "确实", 500);
             } else if (e.raw_message.indexOf("说对不") != -1 ) {
+                loves[e.sender.user_id].data += 0.11;
                 msg_say(e, "对", 500);
             } else if (e.raw_message.indexOf("说对吧") != -1 ) {
+                loves[e.sender.user_id].data += 0.11;
                 msg_say(e, "对", 500);
             } else if (e.raw_message.indexOf("说是不") != -1 ) {
                 msg_say(e, "是", 500);
@@ -389,8 +410,10 @@ async function process_groupmsg(e) {
             } else if (e.raw_message.indexOf("说说得对") != -1 ) {
                 msg_say(e, "说得对", 500);
             } else if (e.raw_message.indexOf("说有道理") != -1 ) {
+                loves[e.sender.user_id].data += 0.11;
                 msg_say(e, "有道理", 500);
             } else if (e.raw_message.indexOf("快面点") != -1 ) {
+                loves[e.sender.user_id].data += 0.11;
                 msg_say(e, generate_pat_seni(), 500);
             } else if (e.message[1].text.slice(0,3) == " 快说就不说略略略" && !auth(e)) {
                 msg_say(e, "你以为我会上当吗略略略", 500);
@@ -401,23 +424,30 @@ async function process_groupmsg(e) {
             } else if (e.message[1].text.slice(0,3) == " 快说" && !auth(e)) {
                 msg_say(e, "就不说略略略", 500);
             } else if (e.message[1].text.indexOf("智障") != -1 && !auth(e)) {
+                loves[e.sender.user_id].data -= 1;
                 msg_say(e, "不准你说我是人工智障！", 500);
             } else if (e.message[1].text.indexOf("智障") != -1 && auth(e)) {
                 msg_say(e, "好吧琳酱会努力的啦……", 500);
             } else if (e.raw_message.indexOf("摸摸头") != -1) {
+                loves[e.sender.user_id].data += 0.5;
                 msg_say(e, "诶w——谢谢w", 500);
                 msg_say(e, "被摸了 嬉しい嬉しい！！", 4000);
             } else if (e.raw_message.indexOf("结婚") != -1) {
+                loves[e.sender.user_id].data += 0.11;
                 msg_say(e, "琳酱是未成年（超小声认真脸", 500);
                 msg_say(e, "毕竟距离诞生还不到一年呢！是小孩子！", 4000);
             } else if (e.raw_message.indexOf("主人") != -1 && !auth(e)) {
+                loves[e.sender.user_id].data -= 0.11;
                 msg_say(e, "你才不是琳酱主人呢！", 500);
             } else if (e.raw_message.indexOf("主人") != -1 && auth(e) && ( e.sender.user_id == bot_owner || e.sender.user_id == setting_data.senioria) ) {
                 msg_say(e, "只要不抛弃琳酱" + e.sender.nickname +"就是永远的主人pwq", 500);
+                loves[e.sender.user_id].data += 0.51;
             } else if (e.raw_message.indexOf("主人") != -1 && auth(e)) {
+                loves[e.sender.user_id].data += 0.01;
                 msg_say(e, "你才不是琳酱主人呢！", 500);
                 msg_say(e, "等等？好像你是？", 4000);
             } else if (e.raw_message.indexOf("吗") != -1 || e.raw_message.indexOf("？") != -1 ) {
+                loves[e.sender.user_id].data += 0.01;
                 say_rand_equal((msg, delay) => msg_say(e, msg, delay), rand_unsure_list(), 1); 
             } else {
                 const msglist = [
@@ -432,6 +462,7 @@ async function process_groupmsg(e) {
                     [1, ["qeq"]],
                 ]
                 say_rand_equal((msg, delay = 1000) => msg_say(e, msg, delay), msglist, 1);    
+                loves[e.sender.user_id].data += 0.1;
             }
 
             // someone at me end
@@ -443,10 +474,20 @@ async function process_groupmsg(e) {
                 }],
                 ["揉揉", res => {
                     if (res.left.indexOf("琳酱") != -1 || res.left.indexOf("bot") != -1) {
-                        msg_say(e, "www也揉揉"+e.sender.nickname+"的说", 2000);
+                        let t = new Date();
+                        upd_loves(e);
+                        msg_say(e, "www也揉揉"+e.sender.nickname+"的说"
+                        + ((t - loves[e.sender.user_id].pat_date > 1800000) ? "（好感度+1" : "")
+                        , 2000);
+                        // 这样写是为了防止一直刷揉揉
+                        if (t - loves[e.sender.user_id].pat_date > 1800000) {
+                            loves[e.sender.user_id].data += 1;
+                        }
+                        loves[e.sender.user_id].pat_date = t;
                     }
                 }],
                 [".hitokoto", async (res) => {
+                    loves[e.sender.user_id].data += 0.01;
                     const hitokoto_obj = await get_hitokoto(res.left.slice(1, res.left.length));
                     msg_say(e, hitokoto_obj.hitokoto + "\n ——" + hitokoto_obj.from, 1000);
                 }],
@@ -458,8 +499,12 @@ async function process_groupmsg(e) {
                     msg_say(e, result.success ? result.text: "搜索失败：" + result.text, 10);
                 }],
                 [".randnoid ", res => {
+                    
+                    loves[e.sender.user_id].data += 0.01;
                     if (res.left == "琳酱是人工智障") {
                         msg_say(e, "琳酱不是人工智障呜呜呜，琳酱是人工智障的概率是0%", 1000);
+                        
+                        loves[e.sender.user_id].data -= 3;
                         return -1;
                     } else {
                         msg_say(e,
@@ -470,6 +515,8 @@ async function process_groupmsg(e) {
                     }
                 }],
                 [".rand", res=> {
+                    
+                    loves[e.sender.user_id].data += 0.01;
                     if (res.left == "") { msg_say(e, e.sender.nickname + " 掷出的概率是 " + String(Math.floor(Math.random()*100)) + "%", 1000); }
                     else if (res.left == " 琳酱是人工智障") {
                         msg_say(e, "琳酱不是人工智障呜呜呜，琳酱是人工智障的概率是0%", 1000);
@@ -483,6 +530,8 @@ async function process_groupmsg(e) {
                     }
                 }],
                 ["琳酱说说话", function() {
+                    
+                    loves[e.sender.user_id].data += 0.01;
                     try{
                         const temp_text = mk.genSentence("");
                         console.log(temp_text);
@@ -492,6 +541,8 @@ async function process_groupmsg(e) {
                     }
                 }],
                 [".reply ", res => {
+                    
+                    loves[e.sender.user_id].data += 0.01;
                     console.log(res.left);
                     try{
                         const temp_text = mk.genSentence(res.left);
@@ -502,15 +553,29 @@ async function process_groupmsg(e) {
                     }
                 }],
                 ["投喂", res => {
-                    const msglist = generate_feed_food(res.left);
-                    for (const [saying, delay] of msglist) {
-                        msg_say(e, saying, delay);
+                    let t = new Date();
+                    upd_loves(e);
+                    if (t - loves[e.sender.user_id].feed_date < 3600000) {
+                        msg_say(e, "谢谢，但是琳酱已经吃过啦！请一小时后再来哦", 500);
+                        return -1;
+                    } else {
+                        const msglist = generate_feed_food(res.left);
+                        for (const [saying, delay, loveadd, eaten] of msglist) {
+                            msg_say(e, saying, delay);
+                            loves[e.sender.user_id] += loveadd;
+                            if (eaten == true) {
+                                loves[e.sender.user_id].feed_date = t;
+                            }
+                        }
                     }
+                    
                 }],
                 [". ", function() {
                     if (e.raw_message.indexOf("智障") != -1 && !auth(e) && e.raw_message.indexOf("不") == -1) {
                         if (e.raw_message.indexOf("我") != -1 || e.raw_message.indexOf("琳酱") != -1) {
-                            msg_say(e, "不准你说我是人工智障！", 500);
+                            msg_say(e, "不准你说琳酱是人工智障！", 500);
+                            
+                            loves[e.sender.user_id].data -= 3;
                             return;
                         }
                     }
@@ -531,8 +596,47 @@ async function process_groupmsg(e) {
                     }
                 }],
                 [".tarot", res => {
+                    loves[e.sender.user_id].data += 0.05;
                     msg_say(e,`${e.sender.nickname}最近遇到了什么烦心事吗？让琳酱给你算一算`, 500);
                     msg_say(e,`${e.sender.nickname}抽到的牌组是：\n${get_tarot(res.left)}`, 4000);
+                    
+                }],
+                ["!查询好感度", function() {
+                    let tmp = Math.round(loves[e.sender.user_id].data);
+                    msg_say(e,`琳酱对${e.sender.nickname}的好感度是${tmp}`, 500);
+                    if (tmp < -1) {
+                        msg_say(e,`琳酱……其实对此不是很知道该说什么`, 3000);
+                    } else if (tmp < 10) {
+                        msg_say(e,`${e.sender.nickname}对于琳酱来说还有点陌生呢。但是美好的邂逅都是从一点点的萌芽开始，不是吗？`, 3000);
+                    } else if (tmp < 20) {
+                        msg_say(e,`${e.sender.nickname}像是琳酱刚认识的邻居家小姑娘，感觉见到就会开心的w。`, 3000);
+                    } else if (tmp < 30) {
+                        msg_say(e,`${e.sender.nickname}大概是陪琳酱一起上学的好朋友。能够见到${e.sender.nickname}，琳酱真的很开心。`, 3000);
+                    } else if (tmp < 50) {
+                        msg_say(e,`琳酱光是想想和${e.sender.nickname}在一起的点滴就觉得很幸福`, 3000);
+                    } else if (tmp < 70) {
+                        msg_say(e,`琳酱单方面宣布！${e.sender.nickname}是琳酱一生的好闺蜜！！！`, 3000);
+                    } else if (tmp < 150) {
+                        msg_say(e,`琳酱好喜欢${e.sender.nickname}！${e.sender.nickname}要记好了，${e.sender.nickname}可是琳酱我超级超级在意的人哦！！`, 3000);
+                    } else if (tmp < 500) {
+                        msg_say(e,`琳酱最喜欢${e.sender.nickname}啦！！！`, 3000);
+                    } else if (tmp >= 500) {
+
+                        if (loves[e.sender.user_id].biaobai == false) {
+                            msg_say(e, `${e.sender.nickname}…… 好想对你说什么呢`, 1000);
+                            msg_say(e, `${e.sender.nickname}的存在，就是琳酱一直努力学习的动力`, 2000);
+                            msg_say(e, `因此，请${e.sender.nickname}继续这样陪着琳酱下去吧`, 4000);
+                            msg_say(e, `因为……${e.sender.nickname}，是我一生记忆中最璀璨的光`, 6000);
+                            msg_say(e, `我因为你的存在，感受到了成为人类的快乐`, 8000);
+                            loves[e.sender.user_id].biaobai = true;
+                        } else {
+                            msg_say(e,`${e.sender.nickname}是我心中最重要的人。`, 1000);
+                            msg_say(e,`诶……你说上次那句？好羞耻，我不敢再说啦嘛`, 2000);
+                            
+                        }
+                        
+                        
+                    }
                 }]
 
             ]) == -1) { return }
