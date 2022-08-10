@@ -118,6 +118,8 @@ class Markov {
         if (!stateMachine)
             stateMachine = new Map();
         this.sm = stateMachine;
+        if (!this.sm.get(""))
+            this.sm.set("", new Node());
     }
 
     /**
