@@ -62,6 +62,8 @@ export function generate_help (type="") {
             return helper_user;
         case " hitokoto":
             return helper_hitokoto;
+        default:
+            return "琳酱没有找到这条帮助哦~";
     }
     
 }

@@ -10,6 +10,7 @@ console.log(setting_data);
 // 变量区
 let senicount = 1.00;
 let groups = {};
+let loves = {};
 let sayings = [];
 const account = setting_data.account;
 const bot_owner = setting_data.bot_owner;
@@ -87,6 +88,12 @@ function load_database() {
         groups = {}
     }
     try{
+        loves = JSON.parse(fs.readFileSync('./libs/loves.json'));
+    } catch(err) {
+        console.log(err);
+        loves = {}
+    }
+    try{
         sayings = JSON.parse(fs.readFileSync('./libs/sayings.json'));
         for (let i in sayings) {
             mk.feedSentence(sayings[i]);
@@ -100,14 +107,24 @@ function write_database() {
         if (err) {
             return console.error(err);
         }
-     });
+    });
     fs.writeFile('libs/sayings.json', JSON.stringify(sayings),  function(err) {
         if (err) {
             return console.error(err);
         }
     });
-    if (Math.random() < 0.01) {
+    fs.writeFile('libs/loves.json', JSON.stringify(loves),  function(err) {
+        if (err) {
+            return console.error(err);
+        }
+    });
+    if ( Math.random() < 0.01 ) {
         fs.writeFile('libs/sayings' + (new Date()).toISOString().slice(0,10) + ".bak.json", JSON.stringify(sayings),  function(err) {
+            if (err) {
+                return console.error(err);
+            }
+        });
+        fs.writeFile('libs/loves' + (new Date()).toISOString().slice(0,10) + ".bak.json", JSON.stringify(loves),  function(err) {
             if (err) {
                 return console.error(err);
             }
@@ -252,7 +269,7 @@ async function process_groupmsg(e) {
         if (parse_cmd(e.raw_message, [
             [".bot ", (res) => {
                 parse_cmd(res.left, [
-                    ["cc", function () {
+                    ["!cc", function () {
                         if (groups[e.group_id].pre_said.length == 0) return;
                         console.log(groups[e.group_id]);
                         const pre_tmp = groups[e.group_id].pre_said[groups[e.group_id].pre_said.length - 1]
@@ -260,29 +277,18 @@ async function process_groupmsg(e) {
                         e.group.recallMsg(pre_tmp.seq, pre_tmp.rand);
                         groups[e.group_id].pre_said = groups[e.group_id].pre_said.slice(0, groups[e.group_id].pre_said.length - 1);
                     }],
-                    ["on", function() {
+                    ["!on", function() {
                         groups[e.group_id].boton = true;
                         msg_say(e, "bot 已打开", 100);
                     }],
-                    ["clear", function() {
+                    ["!clear", function() {
                         groups[e.group_id].pre_said = [];
                         msg_say(e, "已清除历史", 100);
                     }],
-                    ["nuclear", function() {
+                    ["!nuclear", function() {
                         msg_say(e, "boom！！！！！！", 100);
                     }]
                 ])
-            }],
-            [".auth ", function() {
-                if (e.message[1] != undefined && e.message[1].type == "at") {
-                    groups[e.group_id].admins[e.message[1].qq] = true;
-                    const saying_msg = [
-                        "已经对",
-                        segment.at(e.message[1].qq),
-                        "授予bot admin权限",
-                    ]
-                    msg_say(e, saying_msg, 100);
-                }
             }],
             [".authoff ", function() {
                 if (e.message[1] != undefined && e.message[1].type == "at") {
@@ -291,6 +297,17 @@ async function process_groupmsg(e) {
                         "已经对",
                         segment.at(e.message[1].qq),
                         "撤销bot admin权限",
+                    ]
+                    msg_say(e, saying_msg, 100);
+                }
+            }],
+            [".auth ", function() {
+                if (e.message[1] != undefined && e.message[1].type == "at") {
+                    groups[e.group_id].admins[e.message[1].qq] = true;
+                    const saying_msg = [
+                        "已经对",
+                        segment.at(e.message[1].qq),
+                        "授予bot admin权限",
                     ]
                     msg_say(e, saying_msg, 100);
                 }
@@ -317,7 +334,7 @@ async function process_groupmsg(e) {
                     msg_say(e, saying_msg, 100);
                 }
             }],
-            [".learn on", function() {
+            ["!.learn on", function() {
                 groups[e.group_id].learn = true;
                 msg_say(e, "bot 语料收集打开", 100);
                 return -1;
@@ -331,12 +348,12 @@ async function process_groupmsg(e) {
         if (groups[e.group_id].learn) { add_saying(e); }
         
         if (parse_cmd(e.raw_message, [
-            [".bot off", function() {
+            ["!.bot off", function() {
                 groups[e.group_id].boton = false;
                 msg_say(e, "bot 关闭", 100);
                 return -1;
             }],
-            [".learn off", function() {
+            ["!.learn off", function() {
                 groups[e.group_id].learn = false;
                 msg_say(e, "bot 语料收集关闭", 100);
                 return -1;
@@ -424,8 +441,10 @@ async function process_groupmsg(e) {
                 [".help", res => {
                     msg_say(e, generate_help(res.left), 500);
                 }],
-                ["揉揉bot", function() {
-                    msg_say(e, "www也揉揉"+e.sender.nickname+"的说", 2000);
+                ["揉揉", res => {
+                    if (res.left.indexOf("琳酱") != -1 || res.left.indexOf("bot") != -1) {
+                        msg_say(e, "www也揉揉"+e.sender.nickname+"的说", 2000);
+                    }
                 }],
                 [".hitokoto", async (res) => {
                     const hitokoto_obj = await get_hitokoto(res.left.slice(1, res.left.length));
