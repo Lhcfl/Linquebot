@@ -256,6 +256,7 @@ client.on("notice.group.poke", function (e) {
  */
 async function process_groupmsg(e) {
     enter_new_group(e);
+    upd_loves(e);
     translate_fwdbot(e, setting_data);
     console.log(group_on_accesslist(e) ? " " : "未列入白名单或被列入黑名单的群");
     if (group_on_accesslist(e) != true) { return; }
@@ -475,7 +476,7 @@ async function process_groupmsg(e) {
                 ["揉揉", res => {
                     if (res.left.indexOf("琳酱") != -1 || res.left.indexOf("bot") != -1) {
                         let t = new Date();
-                        upd_loves(e);
+                        
                         msg_say(e, "www也揉揉"+e.sender.nickname+"的说"
                         + ((t - loves[e.sender.user_id].pat_date > 1800000) ? "（好感度+1" : "")
                         , 2000);
@@ -554,7 +555,6 @@ async function process_groupmsg(e) {
                 }],
                 ["投喂", res => {
                     let t = new Date();
-                    upd_loves(e);
                     if (t - loves[e.sender.user_id].feed_date < 3600000) {
                         msg_say(e, "谢谢，但是琳酱已经吃过啦！请一小时后再来哦", 500);
                         return -1;
@@ -562,7 +562,7 @@ async function process_groupmsg(e) {
                         const msglist = generate_feed_food(res.left);
                         for (const [saying, delay, loveadd, eaten] of msglist) {
                             msg_say(e, saying, delay);
-                            loves[e.sender.user_id] += loveadd;
+                            loves[e.sender.user_id].data += loveadd;
                             if (eaten == true) {
                                 loves[e.sender.user_id].feed_date = t;
                             }
@@ -602,6 +602,7 @@ async function process_groupmsg(e) {
                     
                 }],
                 ["!查询好感度", function() {
+                    
                     let tmp = Math.round(loves[e.sender.user_id].data);
                     msg_say(e,`琳酱对${e.sender.nickname}的好感度是${tmp}`, 500);
                     if (tmp < -1) {
