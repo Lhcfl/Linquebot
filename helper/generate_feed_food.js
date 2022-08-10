@@ -124,7 +124,7 @@ for (let [names, fn] of food_data) {
  */
 export function generate_feed_food(name) {
     if (!food_map.has(name)) {
-        return [["琳酱不认识，不要给我吃奇怪的东西pwq", 500]];
+        return [["琳酱不认识，不要给我吃奇怪的东西pwq", 500, 0, false]];
     }
     else {
         return food_map.get(name)();
