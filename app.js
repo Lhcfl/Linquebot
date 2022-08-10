@@ -4,6 +4,7 @@ import yaml from "js-yaml";
 import { Markov } from "./components/Markov.js";
 import { createClient, segment } from "oicq";
 
+
 let setting_data = yaml.load(fs.readFileSync('./settings.yml'));
 console.log(setting_data);
 
@@ -53,6 +54,9 @@ import { generate_help } from "./helper/generate_help.js";
 import { say_rand_equal, say_rand_linear } from "./helper/say_rand.js";
 import { parse_cmd } from "./helper/parse_cmd.js";
 import { get_tarot } from "./components/tarot.js";
+import { jielong } from "./components/Chenyu.js";
+
+let cyjl = new jielong();
 
 /**
  * 检查消息所在的群组是否启用了bot.
@@ -644,10 +648,21 @@ async function process_groupmsg(e) {
                         
                         
                     }
+                }],
+                [".成语接龙", res => {
+                    const msgobj = cyjl.start_game(res.left.slice(1,5));
+                    msg_say(e, msgobj.word, 500);
                 }]
 
             ]) == -1) { return }
             //parse end
+
+            if (cyjl.gaming == true) {
+                const msglst = cyjl.check_chenyu(e, e.raw_message);
+                for (const [msg, delay] of msglst) {
+                    msg_say(e, msg, delay);
+                }
+            }
 
             if (e.raw_message == "pwq") {
                 msg_say(e, "pwq", 1000);
