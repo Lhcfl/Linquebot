@@ -29,6 +29,7 @@ function get_one_tarot() {
  * 
  */
 export function get_tarot(arg = "") {
+    checkgroup = [];
     let num = Number(arg);
     if (isNaN(num)) { return "数字不对，不准乱玩琳酱哦！"; }
     if (num <= 0) { num = 1 }
