@@ -366,6 +366,11 @@ async function process_groupmsg(e) {
                 groups[e.group_id].learn = true;
                 msg_say(e, "bot 语料收集打开", 100);
                 return -1;
+            }],
+            ["!.强制结束成语接龙", function() {
+                game_group[e.group_id].cyjl.clear();
+                msg_say(e, "已经强制结束本局", 100);
+                return -1;
             }]
         ]) == -1) { return; }
     //auth user end
@@ -669,7 +674,7 @@ async function process_groupmsg(e) {
                 const msglst = game_group[e.group_id].cyjl.check_chenyu(e, e.raw_message);
                 for (const [msg, delay] of msglst) {
                     msg_say(e, msg, delay);
-                    loves[e.sender.user_id].data += 0.05;
+                    loves[e.sender.user_id].data += 0.025;
                 }
             }
 

@@ -18,7 +18,8 @@ var helper_admin = `OoO这里是linca喂养的人工智障琳
 .auth @某人 授予其对bot管理权
 .authoff @某人 撤销其对bot管理权
 .bot on 开启bot
-.learn on 开启语料收集`
+.learn on 开启语料收集
+.强制结束成语接龙`
 
 var helper_user = `OoO这里是linca喂养的人工智障琳
 未封禁用户操作：
