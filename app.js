@@ -674,7 +674,7 @@ async function process_groupmsg(e) {
                 const msglst = game_group[e.group_id].cyjl.check_chenyu(e, e.raw_message);
                 for (const [msg, delay] of msglst) {
                     msg_say(e, msg, delay);
-                    loves[e.sender.user_id].data += 0.025;
+                    loves[e.sender.user_id].data += 0.015;
                 }
             }
 
