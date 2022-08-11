@@ -56,6 +56,7 @@ import { say_rand_equal, say_rand_linear } from "./helper/say_rand.js";
 import { parse_cmd } from "./helper/parse_cmd.js";
 import { get_tarot } from "./components/tarot.js";
 import { jielong } from "./components/Chenyu.js";
+import { Cidian_query } from "./components/Cidian.js";
 
 /**
  * 检查消息所在的群组是否启用了bot.
@@ -656,6 +657,9 @@ async function process_groupmsg(e) {
                 [".成语接龙", res => {
                     const msgobj = game_group[e.group_id].cyjl.start_game(res.left.slice(1,5));
                     msg_say(e, msgobj.word, 500);
+                }],
+                [".query ", res => {
+                    msg_say(e, Cidian_query(res.left), 500);
                 }]
 
             ]) == -1) { return }
