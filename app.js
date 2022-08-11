@@ -13,6 +13,7 @@ let senicount = 1.00;
 let groups = {};
 let loves = {};
 let sayings = [];
+let game_group = {};
 const account = setting_data.account;
 const bot_owner = setting_data.bot_owner;
 const client = createClient(account);
@@ -55,8 +56,6 @@ import { say_rand_equal, say_rand_linear } from "./helper/say_rand.js";
 import { parse_cmd } from "./helper/parse_cmd.js";
 import { get_tarot } from "./components/tarot.js";
 import { jielong } from "./components/Chenyu.js";
-
-let cyjl = new jielong();
 
 /**
  * 检查消息所在的群组是否启用了bot.
@@ -150,7 +149,12 @@ function enter_new_group(e) {
             bans: {},
             pre_said: [], // Bot上句话
             preword1: "",
-            preword2: ""
+            preword2: "",
+        }
+    }
+    if (game_group[e.group_id] == undefined) {
+        game_group[e.group_id] = {
+            cyjl: new jielong()
         }
     }
 }
@@ -650,15 +654,15 @@ async function process_groupmsg(e) {
                     }
                 }],
                 [".成语接龙", res => {
-                    const msgobj = cyjl.start_game(res.left.slice(1,5));
+                    const msgobj = game_group[e.group_id].cyjl.start_game(res.left.slice(1,5));
                     msg_say(e, msgobj.word, 500);
                 }]
 
             ]) == -1) { return }
             //parse end
 
-            if (cyjl.gaming == true) {
-                const msglst = cyjl.check_chenyu(e, e.raw_message);
+            if (game_group[e.group_id].cyjl.gaming == true) {
+                const msglst = game_group[e.group_id].cyjl.check_chenyu(e, e.raw_message);
                 for (const [msg, delay] of msglst) {
                     msg_say(e, msg, delay);
                 }
