@@ -7,7 +7,8 @@ var helper =`OoO这里是linca喂养的人工智障琳
 .help输出此条帮助信息
 .help user输出您可以执行的操作
 .help admin输出管理员操作
-.help hitokoto查看「一言」的帮助`
+.help hitokoto查看「一言」的帮助
+.help game查看群内小游戏列表`
 
 var helper_admin = `OoO这里是linca喂养的人工智障琳
 管理员操作
@@ -19,7 +20,7 @@ var helper_admin = `OoO这里是linca喂养的人工智障琳
 .authoff @某人 撤销其对bot管理权
 .bot on 开启bot
 .learn on 开启语料收集
-.强制结束成语接龙`
+.kill [游戏名] 强制结束本轮游戏`
 
 var helper_user = `OoO这里是linca喂养的人工智障琳
 未封禁用户操作：
@@ -29,9 +30,9 @@ var helper_user = `OoO这里是linca喂养的人工智障琳
 .tarot [数量?] 抽取n张塔罗牌（n≤4)， 不加参数抽一张
 .search [关键词] 查百度百科
 .query [成语] 查询成语词典
-查询好感度 查询你的好感度
-.成语接龙 [开始成语?] 开始一局10分钟的成语接龙
+.game [游戏名] [游戏参数?]：开始群内小游戏
 投喂[食物] 进行投喂
+查询好感度 查询你的好感度
 可以帮你们复读
 ------
 测试性功能：
@@ -51,6 +52,11 @@ g：其他\th：影视\ti：诗词
 j：网易云\tk：哲学\tl：抖机灵
 访问一言的网站 https://hitokoto.cn/`
 
+var helper_game = `OoO这里是linca喂养的人工智障琳
+群聊小游戏：(记住玩游戏时不要改自己的昵称哦)
+.game 成语接龙 [开始成语?] 开始一局10分钟的成语接龙`
+
+
 export function generate_help (type="") {
     switch (type){
         case "": 
@@ -61,20 +67,10 @@ export function generate_help (type="") {
             return helper_user;
         case " hitokoto":
             return helper_hitokoto;
+        case " game":
+            return helper_game;
         default:
             return "琳酱没有找到这条帮助哦~";
     }
     
 }
-
-// export function generate_help_admin () {
-//     return helper_admin;
-// }
-
-// export function generate_help_user () {
-//     return helper_user;
-// }
-
-// export function generate_help_hitokoto () {
-//     return helper_hitokoto;
-// }

@@ -246,6 +246,18 @@ function msg_say(e, words, typing_time = 3000) {
     setTimeout(say_a_sentense, typing_time);
     if(Math.random()<0.1) { discount_seni(); }
 }
+/**
+ * @param {[[Msgtext, Number:delay, ?extra]]} msglist 
+ */
+function parse_msglist(e, msglist, extra_func) {
+    for (const i of msglist) {
+        msg_say(e, i[0], i[1] != undefined ? i[1] : 3000);
+        if (extra_func != undefined) {
+            extra_func(i);
+        }
+    }
+    
+}
 
 // client监控区
 
@@ -367,10 +379,14 @@ async function process_groupmsg(e) {
                 msg_say(e, "bot 语料收集打开", 100);
                 return -1;
             }],
-            ["!.强制结束成语接龙", function() {
-                game_group[e.group_id].cyjl.clear();
-                msg_say(e, "已经强制结束本局", 100);
-                return -1;
+            [".kill ", res => {
+                parse_cmd(res.left, [
+                    ["!成语接龙", function() {
+                        game_group[e.group_id].cyjl.clear();
+                        msg_say(e, "已经强制结束本局", 100);
+                        return -1;
+                    }]
+                ])
             }]
         ]) == -1) { return; }
     //auth user end
@@ -580,13 +596,13 @@ async function process_groupmsg(e) {
                         return -1;
                     } else {
                         const msglist = generate_feed_food(res.left);
-                        for (const [saying, delay, loveadd, eaten] of msglist) {
-                            msg_say(e, saying, delay);
+                        parse_msglist(e, msglist, item => {
+                            let loveadd = item[2], eaten = item[3];
                             loves[e.sender.user_id].data += loveadd;
                             if (eaten == true) {
                                 loves[e.sender.user_id].feed_date = t;
                             }
-                        }
+                        });
                     }
                     
                 }],
@@ -659,9 +675,13 @@ async function process_groupmsg(e) {
                         
                     }
                 }],
-                [".成语接龙", res => {
-                    const msgobj = game_group[e.group_id].cyjl.start_game(res.left.slice(1,5));
-                    msg_say(e, msgobj.word, 500);
+                [".game ", res => {
+                    parse_cmd(res.left, [
+                        ["成语接龙", res => {
+                            const msgobj = game_group[e.group_id].cyjl.start_game(res.left.slice(1,5));
+                            msg_say(e, msgobj.word, 500);
+                        }],
+                    ])
                 }],
                 [".query ", res => {
                     msg_say(e, Cidian_query(res.left), 500);
@@ -672,10 +692,9 @@ async function process_groupmsg(e) {
 
             if (game_group[e.group_id].cyjl.gaming == true) {
                 const msglst = game_group[e.group_id].cyjl.check_chenyu(e, e.raw_message);
-                for (const [msg, delay] of msglst) {
-                    msg_say(e, msg, delay);
+                parse_msglist(e, msglst, function() {
                     loves[e.sender.user_id].data += 0.015;
-                }
+                })
             }
 
             if (e.raw_message == "pwq") {
