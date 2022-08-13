@@ -593,7 +593,7 @@ async function process_groupmsg(e) {
                     
                     loves[e.sender.user_id].data += 0.01;
                     console.log(res.left);
-                    if (sayings == []) {
+                    if (sayings.length == 0) {
                         msg_say(e, "错误：琳酱的语料库为空。请使用 .learn on 给琳酱投喂语料", 1000);
                     }
                     try{
