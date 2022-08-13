@@ -58,6 +58,8 @@ import { get_tarot } from "./components/tarot.js";
 import { jielong } from "./components/Chenyu.js";
 import { Cidian_query } from "./components/Cidian.js";
 import { hash_string, random_seed } from "./helper/seed_random.js";
+import { redbag } from "./components/redbag.js";
+import { data } from "node_modules/cheerio/lib/api/attributes.js";
 
 /**
  * 检查消息所在的群组是否启用了bot.
@@ -154,9 +156,11 @@ function enter_new_group(e) {
             preword2: "",
         }
     }
+    // games
     if (game_group[e.group_id] == undefined) {
         game_group[e.group_id] = {
-            cyjl: new jielong()
+            cyjl: new jielong(),
+            rb: new redbag()
         }
     }
 }
@@ -690,6 +694,18 @@ async function process_groupmsg(e) {
                             const msgobj = game_group[e.group_id].cyjl.start_game(res.left.slice(1,5));
                             msg_say(e, msgobj.word, 500);
                         }],
+                        ["redbag ", res => {
+                            const msgobj = game_group[e.group_id].rb.gen_redbag(e, res.left.slice(1,res.left.length), c => loves[e.sender.user_id].data > c);
+                            msg_say(e, msgobj.word, 500);
+                            loves[e.sender.user_id].data -= msgobj.coin;
+                        }],
+                        
+                        ["!redbag", () => {
+                            const msgobj = game_group[e.group_id].rb.take_redbag(e)
+                            parse_msglist(e, msgobj.msg)
+                            loves[e.sender.user_id].data += msgobj.coin;
+                        }],
+                        
                     ])
                 }],
                 [".query ", res => {

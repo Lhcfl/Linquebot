@@ -27,7 +27,7 @@ class jielong {
     start_game(input = "") {
         if (this.gaming == true) {
             return {
-                open: false,
+                success: false,
                 word: `现在正在游戏哦，接龙开头词是：${this.st}`
             }
         } else {
@@ -35,14 +35,14 @@ class jielong {
             this.clear();
             if (cy[input] == undefined) {
                 return {
-                    open: false,
+                    success: false,
                     word: "开始游戏失败：错误的成语"
                 }
             } else {
                 this.st = cy[input].ed;
                 this.gaming = true;
                 return {
-                    open: true,
+                    success: true,
                     word: `开始游戏成功：接龙开头词是：${this.st}`
                 }
             }
