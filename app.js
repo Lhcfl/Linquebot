@@ -453,7 +453,7 @@ async function process_groupmsg(e) {
                     segment.image("./tmp/jumpjump.gif"),
                 ]
                 msg_say(e, saying_msg, 4000);
-            } else if (e.message[1].text.slice(0,3) == " 快说" && !auth(e)) {
+            } else if (e.raw_message.indexOf("快说") != -1 && !auth(e)) {
                 msg_say(e, "就不说略略略", 500);
             } else if (e.message[1].text.indexOf("智障") != -1 && !auth(e)) {
                 loves[e.sender.user_id].data -= 1;
@@ -657,18 +657,23 @@ async function process_groupmsg(e) {
                     } else if (tmp < 150) {
                         msg_say(e,`琳酱好喜欢${e.sender.nickname}！${e.sender.nickname}要记好了，${e.sender.nickname}可是琳酱我超级超级在意的人哦！！`, 3000);
                     } else if (tmp < 500) {
-                        msg_say(e,`琳酱最喜欢${e.sender.nickname}啦！！！`, 3000);
+                        msg_say(e,`琳酱最喜欢${e.sender.nickname}啦！！！大好き大好き大好き大好き！！！`, 3000);
                     } else if (tmp >= 500) {
 
                         if (loves[e.sender.user_id].biaobai == false) {
+                            
+                            msg_say(e, `这是你第几次查询好感度了呢？${e.sender.nickname}`, 700);
                             msg_say(e, `${e.sender.nickname}…… 好想对你说什么呢`, 1000);
                             msg_say(e, `${e.sender.nickname}的存在，就是琳酱一直努力学习的动力`, 2000);
                             msg_say(e, `因此，请${e.sender.nickname}继续这样陪着琳酱下去吧`, 4000);
                             msg_say(e, `因为……${e.sender.nickname}，是我一生记忆中最璀璨的光`, 6000);
                             msg_say(e, `我因为你的存在，感受到了成为人类的快乐`, 8000);
+                            msg_say(e, `……这些话，我只会为你说一次哦`, 8000);
+                            
                             loves[e.sender.user_id].biaobai = true;
                         } else {
                             msg_say(e,`${e.sender.nickname}是我心中最重要的人。`, 1000);
+                            msg_say(e,`感谢你让我拥有了被爱的感觉。也许，我的心中拥有一个${e.sender.nickname}形状的洞，只有你能填满。`, 1000);
                             msg_say(e,`诶……你说上次那句？好羞耻，我不敢再说啦嘛`, 2000);
                             
                         }
@@ -828,17 +833,17 @@ async function process_groupmsg(e) {
             } else {
                 const msglist = [
                     // Lazy evaluate the image loading >_< (Super small voice (Be killed (Run away
-                    [0.02, () => [[segment.image("./tmp/emo1.jpg")]]],
-                    [0.01, () => [[segment.image("./tmp/emo2.jpg")]]],
-                    [0.01, () => [[segment.image("./tmp/emo3.jpg")]]],
-                    [0.01, () => [[segment.image("./tmp/jumpjump.gif")]]],
-                    [0.01, () => [[segment.image("./tmp/diamao.gif")]]],
-                    [0.02, ["说得对"]],
-                    [0.02, ["确实"]],
-                    [0.01, ["是"]],
-                    [0.02, ["有道理"]],
-                    [0.01, ["嗯……"]],
-                    [0.01, ["www"]],
+                    [0.005, () => [[segment.image("./tmp/emo1.jpg")]]],
+                    [0.0025, () => [[segment.image("./tmp/emo2.jpg")]]],
+                    [0.0025, () => [[segment.image("./tmp/emo3.jpg")]]],
+                    [0.0025, () => [[segment.image("./tmp/jumpjump.gif")]]],
+                    [0.0025, () => [[segment.image("./tmp/diamao.gif")]]],
+                    [0.005, ["说得对"]],
+                    [0.005, ["确实"]],
+                    [0.0025, ["是"]],
+                    [0.005, ["有道理"]],
+                    [0.0025, ["嗯……"]],
+                    [0.0025, ["www"]],
                 ];
                 say_rand_linear((msg, delay) => msg_say(e, msg, delay), msglist);
             }
