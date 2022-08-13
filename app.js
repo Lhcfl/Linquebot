@@ -395,7 +395,12 @@ async function process_groupmsg(e) {
                         game_group[e.group_id].cyjl.clear();
                         msg_say(e, "已经强制结束本局", 100);
                         return -1;
-                    }]
+                    }],
+                    ["!redbag", function() {
+                        game_group[e.group_id].rb.clear();
+                        msg_say(e, "已经强制结束本红包", 100);
+                        return -1;
+                    }],
                 ])
             }]
         ]) == -1) { return; }
@@ -732,7 +737,7 @@ async function process_groupmsg(e) {
                 let timenow = new Date();
                 // 被动早晚安
                 parse_cmd(e.raw_message, [
-                    ["晚安", () => {
+                    [["晚安", "琳酱好梦", "好梦"], () => {
                         if (timenow.getHours() >= 20 && timenow.getHours() < 22) {
                             msg_say(e, `${e.sender.nickname}晚安呀，早睡对身体好pwq`, 1000);
                         } else if (timenow.getHours() >= 22) {
@@ -771,7 +776,7 @@ async function process_groupmsg(e) {
             if (loves[e.sender.user_id].data >= 50) {
                 let timenow = new Date();
                 // 自动早晚安
-                if (loves[e.sender.user_id].greeting == undefined || timenow - loves[e.sender.user_id].greeting > 3600000 * 6) {
+                if (loves[e.sender.user_id].greeting == undefined || timenow - loves[e.sender.user_id].greeting > 3600000 * 4) {
                     if (timenow.getHours() >= 23 || timenow.getHours() <= 2) {
                         loves[e.sender.user_id].greeting = timenow;
                         msg_say(e, `很晚了呢，揉揉${e.sender.nickname}，该睡觉啦w，不要熬夜哦`, 1000);
