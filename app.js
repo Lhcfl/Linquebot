@@ -241,12 +241,17 @@ function upd_loves(e) {
  */
 function msg_say(e, words, typing_time = 3000) {
     function say_a_sentense() {
-        const pro_temp = e.group.sendMsg(words)
-        Promise.all([pro_temp]).then((values) => {
-            const seq = values[0].seq;
-            const rand = values[0].rand;
-            groups[e.group_id].pre_said.push({seq: seq, rand: rand}); 
-        })
+        try {
+            const pro_temp = e.group.sendMsg(words)
+            Promise.all([pro_temp]).then((values) => {
+                const seq = values[0].seq;
+                const rand = values[0].rand;
+                groups[e.group_id].pre_said.push({seq: seq, rand: rand}); 
+            })
+        } catch (error) {
+            fs.writeFile("Log"+(new Date()).toISOString(), error)       
+        }
+        
     }
     setTimeout(say_a_sentense, typing_time);
     if(Math.random()<0.1) { discount_seni(); }
