@@ -704,7 +704,7 @@ async function process_groupmsg(e) {
                             msg_say(e, msgobj.word, 500);
                         }],
                         ["redbag ", res => {
-                            const msgobj = game_group[e.group_id].rb.gen_redbag(e, res.left.slice(1,res.left.length), c => loves[e.sender.user_id].data > c);
+                            const msgobj = game_group[e.group_id].rb.gen_redbag(e, res.left, c => loves[e.sender.user_id].data > c);
                             msg_say(e, msgobj.word, 500);
                             loves[e.sender.user_id].data -= msgobj.coin;
                         }],
