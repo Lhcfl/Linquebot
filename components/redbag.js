@@ -16,7 +16,7 @@ class redbag {
      * @param {String} arg 
      */
     gen_redbag(e, arg, check_func) {
-        if (this.redbags.length == 0) {
+        if (this.redbags.length != 0) {
             return {
                 success: false,
                 coin: 0,
