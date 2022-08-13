@@ -6,23 +6,47 @@
  * 
  * @returns func's return
  */
+
+
 export async function parse_cmd(rawmsg, cmdlist) {
     for (const [cmd, func] of cmdlist) {
-        if (cmd[0] != '!') {
-            if (rawmsg.slice(0, cmd.length) == cmd) {
-                return await func({
-                    iter: cmd.length,
-                    left: rawmsg.slice(cmd.length, rawmsg.length)
-                });
+        if (typeof cmd == "string") {
+            if (cmd[0] != '!') {
+                if (rawmsg.slice(0, cmd.length) == cmd) {
+                    return await func({
+                        iter: cmd.length,
+                        left: rawmsg.slice(cmd.length, rawmsg.length)
+                    });
+                }
+            } else {
+                // 以"!"开头的命令要求严格匹配
+                if (rawmsg == cmd.slice(1, cmd.length)) {
+                    return await func({
+                        iter: cmd.length,
+                        left: ""
+                    });
+                }
             }
-        } else {
-            // 以"!"开头的命令要求严格匹配
-            if (rawmsg == cmd.slice(1, cmd.length)) {
-                return await func({
-                    iter: cmd.length,
-                    left: ""
-                });
+        } else if (typeof cmd == 'object') {
+            for (const cmditem of cmd) {
+                if (cmditem[0] != '!') {
+                    if (rawmsg.slice(0, cmditem.length) == cmditem) {
+                        return await func({
+                            iter: cmditem.length,
+                            left: rawmsg.slice(cmditem.length, rawmsg.length)
+                        });
+                    }
+                } else {
+                    // 以"!"开头的命令要求严格匹配
+                    if (rawmsg == cmditem.slice(1, cmditem.length)) {
+                        return await func({
+                            iter: cmditem.length,
+                            left: ""
+                        });
+                    }
+                }
             }
         }
+        
     }
 }

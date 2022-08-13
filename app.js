@@ -718,7 +718,7 @@ async function process_groupmsg(e) {
                         }
                         
                     }],
-                    ["早安", () => {
+                    [["早安", "!早"], () => {
                         if (timenow.getHours() >= 4 && timenow.getHours() < 6) {
                             msg_say(e, `醒的好早！${e.sender.nickname}早安呀`, 1000);
                         } else if (timenow.getHours() == 6) {
