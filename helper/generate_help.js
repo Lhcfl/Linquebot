@@ -1,4 +1,5 @@
-var helper =`OoO这里是linca喂养的人工智障琳
+var helper = {
+'': `OoO这里是linca喂养的人工智障琳
 对任意用户：
 .bot status输出bot状态（显然bot未开机则不会输出）
 .status输出您的状态
@@ -7,10 +8,9 @@ var helper =`OoO这里是linca喂养的人工智障琳
 .help输出此条帮助信息
 .help user输出您可以执行的操作
 .help admin输出管理员操作
-.help hitokoto查看「一言」的帮助
-.help game查看群内小游戏列表`
+.help [命令] 查看对应命令的帮助（可能没有）`,
 
-var helper_admin = `OoO这里是linca喂养的人工智障琳
+' admin': `OoO这里是linca喂养的人工智障琳
 管理员操作
 .bot clear清除bot历史
 .bot cc 撤回bot的上一句话
@@ -20,9 +20,9 @@ var helper_admin = `OoO这里是linca喂养的人工智障琳
 .authoff @某人 撤销其对bot管理权
 .bot on 开启bot
 .learn on 开启语料收集
-.kill [游戏名] 强制结束本轮游戏`
+.kill [游戏名] 强制结束本轮游戏`,
 
-var helper_user = `OoO这里是linca喂养的人工智障琳
+' user': `OoO这里是linca喂养的人工智障琳
 未封禁用户操作：
 .bot off 关闭bot
 .hitokoto [参数?]调用一言
@@ -39,9 +39,9 @@ var helper_user = `OoO这里是linca喂养的人工智障琳
 .learn off 关闭语料收集
 .reply [句首] ai生成一句话
 琳酱说说话 也是ai生成一句话
-使用测试功能请谨慎，可能对他人有影响。`
+使用测试功能请谨慎，可能对他人有影响。`,
 
-var helper_hitokoto = `OoO这里是linca喂养的人工智障琳
+' hitokoto': `OoO这里是linca喂养的人工智障琳
 一言网（hitokoto.cn）创立于 2016 年，隶属于萌创团队，目前网站主要提供一句话服务。
 .hitokoto [参数]
 参数列表：
@@ -50,27 +50,18 @@ a：动画\tb：漫画\tc：游戏
 d：文学\te：原创\tf：来自网络
 g：其他\th：影视\ti：诗词
 j：网易云\tk：哲学\tl：抖机灵
-访问一言的网站 https://hitokoto.cn/`
+访问一言的网站 https://hitokoto.cn/`,
 
-var helper_game = `OoO这里是linca喂养的人工智障琳
+" game": `OoO这里是linca喂养的人工智障琳
 群聊小游戏：(记住玩游戏时不要改自己的昵称哦)
 .game 成语接龙 [开始成语?] 开始一局10分钟的成语接龙`
 
+}
 
 export function generate_help (type="") {
-    switch (type){
-        case "": 
-            return helper;
-        case " admin":
-            return helper_admin;
-        case " user":
-            return helper_user;
-        case " hitokoto":
-            return helper_hitokoto;
-        case " game":
-            return helper_game;
-        default:
-            return "琳酱没有找到这条帮助哦~";
+    if (helper[type] == undefined) {
+        return "琳酱没有找到这条帮助哦~";
+    } else {
+        return helper[type];
     }
-    
 }

@@ -218,10 +218,11 @@ function discount_seni() {
 function upd_loves(e) {
     if (loves[e.sender.user_id] == undefined) {
         loves[e.sender.user_id] = {
-            data: 0,
-            feed_date: 0,
-            pat_date: 0,
-            biaobai: false
+            data: 0, //数据
+            feed_date: 0, //上次投喂
+            pat_date: 0,  //上次揉揉
+            biaobai: false,  //表白与否
+            greeting: 0  // 上次打招呼
         };
         if (auth(e)) {
             loves[e.sender.user_id].data = 10;
@@ -690,12 +691,80 @@ async function process_groupmsg(e) {
             ]) == -1) { return }
             //parse end
 
-            if (game_group[e.group_id].cyjl.gaming == true) {
+            if (game_group[e.group_id].cyjl.gaming == true) { 
+                // 成语接龙
                 const msglst = game_group[e.group_id].cyjl.check_chenyu(e, e.raw_message);
                 parse_msglist(e, msglst, function() {
                     loves[e.sender.user_id].data += 0.015;
                 })
             }
+
+            if (loves[e.sender.user_id].data >= 20) {
+                // 特殊好感度福利
+                let timenow = new Date();
+                // 被动早晚安
+                parse_cmd(e.raw_message, [
+                    ["晚安", () => {
+                        if (timenow.getHours() >= 20 && timenow.getHours() < 22) {
+                            msg_say(e, `${e.sender.nickname}晚安呀，早睡对身体好pwq`, 1000);
+                        } else if (timenow.getHours() >= 22) {
+                            msg_say(e, `${e.sender.nickname}晚安呀，不要熬夜哟pwq`, 1000);
+                        } else if (timenow.getHours() < 2) {
+                            msg_say(e, `${e.sender.nickname}快点睡觉去啊，不准再熬夜了哦。晚安qaq`, 1000);
+                        } else if (timenow.getHours() < 4) {
+                            msg_say(e, `${e.sender.nickname}不准再聊天了，快睡觉w`, 1000);
+                        } else {
+                            msg_say(e, `诶，${e.sender.nickname}作息好奇怪qaq`, 1000);
+                        }
+                        
+                    }],
+                    ["早安", () => {
+                        if (timenow.getHours() >= 4 && timenow.getHours() < 6) {
+                            msg_say(e, `醒的好早！${e.sender.nickname}早安呀`, 1000);
+                        } else if (timenow.getHours() == 6) {
+                            msg_say(e, `诶嘿！${e.sender.nickname}起了个大早，早安呀`, 1000);
+                        } else if (timenow.getHours() <= 8) {
+                            msg_say(e, `诶嘿！${e.sender.nickname}早安呀`, 1000);
+                        } else if (timenow.getHours() <= 12) {
+                            msg_say(e, `www，${e.sender.nickname}睡得好不好啊？是睡了个懒觉吗？`, 1000);
+                        } else {
+                            msg_say(e, `${e.sender.nickname}早安呀pwq（这个作息有点怪（？）`, 1000);
+                        }
+                    }],
+                    ["午安", () => {
+                        if (timenow.getHours() == 12) {
+                            msg_say(e, `诶嘿！${e.sender.nickname}午安呀`, 1000);
+                        }
+                    }],
+                ]);
+            }
+            
+            // 50 好感福利
+            if (loves[e.sender.user_id].data >= 50) {
+                let timenow = new Date();
+                // 自动早晚安
+                if (loves[e.sender.user_id].greeting == undefined || timenow - loves[e.sender.user_id].greeting > 3600000 * 6) {
+                    if (timenow.getHours() >= 23 || timenow.getHours() <= 2) {
+                        loves[e.sender.user_id].greeting = timenow();
+                        msg_say(e, `很晚了呢，揉揉${e.sender.nickname}，该睡觉啦w，不要熬夜哦`, 1000);
+                    }
+                    if (timenow.getHours() >= 6 || timenow.getHours() <= 9) {
+                        loves[e.sender.user_id].greeting = timenow();
+                        msg_say(e, `${e.sender.nickname}，早安w~ 欢迎来到新的一天！`, 1000);
+                    }
+                }
+            }
+
+            // 100 好感福利
+            if (loves[e.sender.user_id].data >= 100) {
+                // 贴贴
+                if (e.raw_message.indexOf("琳酱") != -1 && e.raw_message.indexOf("贴贴") != -1 ) {
+                    msg_say(e, `${e.sender.nickname}贴贴！！`, 500);
+                    loves[e.sender.user_id].data += 0.02;
+                }
+            }
+
+            
 
             if (e.raw_message == "pwq") {
                 msg_say(e, "pwq", 1000);
