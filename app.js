@@ -340,7 +340,7 @@ async function process_groupmsg(e) {
             [".authoff ", function() {
                 if (e.message[1] != undefined && e.message[1].type == "at") {
                     groups[e.group_id].admins[e.message[1].qq] = false;
-                    loves[e.sender.user_id].data -= 10;
+                    loves[e.message[1].qq].data -= 10;
                     const saying_msg = [
                         "已经对",
                         segment.at(e.message[1].qq),
@@ -352,7 +352,7 @@ async function process_groupmsg(e) {
             [".auth ", function() {
                 if (e.message[1] != undefined && e.message[1].type == "at") {
                     groups[e.group_id].admins[e.message[1].qq] = true;
-                    loves[e.sender.user_id].data += 10;
+                    loves[e.message[1].qq].data += 10;
                     const saying_msg = [
                         "已经对",
                         segment.at(e.message[1].qq),
@@ -364,7 +364,7 @@ async function process_groupmsg(e) {
             [".ban ", function() {
                 if (e.message[1] != undefined && e.message[1].type == "at") {
                     groups[e.group_id].bans[e.message[1].qq], true;
-                    loves[e.sender.user_id].data -= 20;
+                    loves[e.message[1].qq].data -= 20;
                     const saying_msg = [
                         "已经撤销",
                         segment.at(e.message[1].qq),
