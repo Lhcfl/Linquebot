@@ -773,11 +773,11 @@ async function process_groupmsg(e) {
                 // 自动早晚安
                 if (loves[e.sender.user_id].greeting == undefined || timenow - loves[e.sender.user_id].greeting > 3600000 * 6) {
                     if (timenow.getHours() >= 23 || timenow.getHours() <= 2) {
-                        loves[e.sender.user_id].greeting = timenow();
+                        loves[e.sender.user_id].greeting = timenow;
                         msg_say(e, `很晚了呢，揉揉${e.sender.nickname}，该睡觉啦w，不要熬夜哦`, 1000);
                     }
                     if (timenow.getHours() >= 6 || timenow.getHours() <= 9) {
-                        loves[e.sender.user_id].greeting = timenow();
+                        loves[e.sender.user_id].greeting = timenow;
                         msg_say(e, `${e.sender.nickname}，早安w~ 欢迎来到新的一天！`, 1000);
                     }
                 }
