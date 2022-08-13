@@ -1,5 +1,3 @@
-import { clear } from "console";
-
 class redbag {
     redbags = [];
     takelist = [];
@@ -25,7 +23,7 @@ class redbag {
                 word: `包红包失败：还有一个红包`
             }
         }
-        clear();
+        this.clear();
         let [coin, num] = arg.split(" ");
         num = Number(num); coin = Number(coin);
         if (check_func(coin)) {
@@ -58,6 +56,12 @@ class redbag {
         
     }
     take_redbag(e) {
+        if (this.redbags == []) {
+            return {
+                coin: 0,
+                msg: []
+            }
+        }
         if (this.taken[e.sender.user_id] != undefined) {
             return {
                 coin: 0,
@@ -65,7 +69,7 @@ class redbag {
             }
         }
         let tmp = this.redbags[this.redbags.length - 1];
-        if (this.redbags.length != 1) {
+        if (this.redbags.length > 1) {
             this.redbags.pop();
             this.taken[e.sender.user_id] = true
             this.takelist.push({
