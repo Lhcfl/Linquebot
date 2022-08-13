@@ -57,6 +57,7 @@ import { parse_cmd } from "./helper/parse_cmd.js";
 import { get_tarot } from "./components/tarot.js";
 import { jielong } from "./components/Chenyu.js";
 import { Cidian_query } from "./components/Cidian.js";
+import { hash_string, random_seed } from "./helper/seed_random.js";
 
 /**
  * 检查消息所在的群组是否启用了bot.
@@ -502,7 +503,7 @@ async function process_groupmsg(e) {
             // parse cmd start
             if (parse_cmd(e.raw_message, [
                 [".help", res => {
-                    msg_say(e, generate_help(res.left), 500);
+                    parse_msglist(e, generate_help(res.left));
                 }],
                 ["揉揉", res => {
                     if (res.left.indexOf("琳酱") != -1 || res.left.indexOf("bot") != -1) {
@@ -599,11 +600,10 @@ async function process_groupmsg(e) {
                         const msglist = generate_feed_food(res.left);
                         parse_msglist(e, msglist, item => {
                             let loveadd = item[2], eaten = item[3];
-                            loves[e.sender.user_id].data += loveadd;
-                            if (eaten == true) {
-                                loves[e.sender.user_id].feed_date = t;
-                            }
+                            if (t - loves[e.sender.user_id].feed_date < 3600000) {loves[e.sender.user_id].data += loveadd;}
+                            if (eaten == true) loves[e.sender.user_id].feed_date = t;
                         });
+                        
                     }
                     
                 }],
@@ -637,6 +637,9 @@ async function process_groupmsg(e) {
                     msg_say(e,`${e.sender.nickname}最近遇到了什么烦心事吗？让琳酱给你算一算`, 500);
                     msg_say(e,`${e.sender.nickname}抽到的牌组是：\n${get_tarot(res.left)}`, 4000);
                     
+                }],
+                [".jrrp", res => {
+                    msg_say(e,`${e.sender.nickname}的今日人品是：${random_seed(hash_string((new Date()).toDateString() + (res.left) + e.sender.user_id + e.sender.nickname))} of 100`, 4000);
                 }],
                 ["!查询好感度", function() {
                     
