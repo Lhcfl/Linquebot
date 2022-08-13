@@ -776,7 +776,7 @@ async function process_groupmsg(e) {
                         loves[e.sender.user_id].greeting = timenow;
                         msg_say(e, `很晚了呢，揉揉${e.sender.nickname}，该睡觉啦w，不要熬夜哦`, 1000);
                     }
-                    if (timenow.getHours() >= 6 || timenow.getHours() <= 9) {
+                    if (timenow.getHours() >= 6 && timenow.getHours() <= 9) {
                         loves[e.sender.user_id].greeting = timenow;
                         msg_say(e, `${e.sender.nickname}，早安w~ 欢迎来到新的一天！`, 1000);
                     }
