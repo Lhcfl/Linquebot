@@ -25,7 +25,7 @@ class redbag {
         }
         this.clear();
         let [coin, num] = arg.split(" ");
-        num = Number(num); coin = Number(coin);
+        num = Math.abs(Number(num)); coin = Math.abs(Number(coin));
         if (check_func(coin)) {
             this.from = e.sender.nickname;
             if (num <= 1) {
