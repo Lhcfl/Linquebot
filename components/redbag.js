@@ -83,7 +83,7 @@ class redbag {
                 })
                 return {
                     coin: tmp,
-                    msg: [[`${e.sender.nickname}打开了${this.from}的红包并获得${tmp}点好感`, 500]]
+                    msg: [[`${e.sender.nickname}打开了${this.from}的红包并获得${String(tmp).slice(0,4)}点好感`, 500]]
                 }
             } else {
                 this.redbags.pop();
@@ -96,7 +96,7 @@ class redbag {
                 return {
                     coin: tmp,
                     msg: [
-                        [`${e.sender.nickname}打开了${this.from}的红包并获得${tmp}点好感`, 500],
+                        [`${e.sender.nickname}打开了${this.from}的红包并获得${String(tmp).slice(0,4)}点好感`, 500],
                         [`${this.from}的红包已被领完，${this.takelist[0].name}是运气王`, 1500]
                     ]
                 }
