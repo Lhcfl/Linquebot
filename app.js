@@ -737,7 +737,7 @@ async function process_groupmsg(e) {
                 let timenow = new Date();
                 // 被动早晚安
                 parse_cmd(e.raw_message, [
-                    [["晚安", "琳酱好梦", "好梦"], () => {
+                    [["晚安", "琳酱好梦", "好梦", "琳酱晚安"], () => {
                         if (timenow.getHours() >= 20 && timenow.getHours() < 22) {
                             msg_say(e, `${e.sender.nickname}晚安呀，早睡对身体好pwq`, 1000);
                         } else if (timenow.getHours() >= 22) {
@@ -751,7 +751,7 @@ async function process_groupmsg(e) {
                         }
                         
                     }],
-                    [["早安", "!早"], () => {
+                    [["早安", "!早", "琳酱早安"], () => {
                         if (timenow.getHours() >= 4 && timenow.getHours() < 6) {
                             msg_say(e, `醒的好早！${e.sender.nickname}早安呀`, 1000);
                         } else if (timenow.getHours() == 6) {
@@ -764,7 +764,7 @@ async function process_groupmsg(e) {
                             msg_say(e, `${e.sender.nickname}早安呀pwq（这个作息有点怪（？）`, 1000);
                         }
                     }],
-                    ["午安", () => {
+                    [["午安", "琳酱午安"], () => {
                         if (timenow.getHours() == 12) {
                             msg_say(e, `诶嘿！${e.sender.nickname}午安呀`, 1000);
                         }
@@ -776,7 +776,7 @@ async function process_groupmsg(e) {
             if (loves[e.sender.user_id].data >= 50) {
                 let timenow = new Date();
                 // 自动早晚安
-                if (loves[e.sender.user_id].greeting == undefined || timenow - loves[e.sender.user_id].greeting > 3600000 * 4) {
+                if (loves[e.sender.user_id].greeting == undefined || timenow - loves[e.sender.user_id].greeting > 3600000 * 3) {
                     if (timenow.getHours() >= 23 || timenow.getHours() <= 2) {
                         loves[e.sender.user_id].greeting = timenow;
                         msg_say(e, `很晚了呢，揉揉${e.sender.nickname}，该睡觉啦w，不要熬夜哦`, 1000);
