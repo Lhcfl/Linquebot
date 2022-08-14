@@ -34,6 +34,13 @@ class redbag {
                     word: `包红包失败：数量过高`
                 }
             }
+            if (isNaN(num) || num == undefined) {
+                return {
+                    success: false,
+                    coin: 0,
+                    word: `包红包失败：数量错误`
+                }
+            }
             if (check_func(coin) && !isNaN(coin)) {
                 this.from = e.sender.nickname;
                 if (num <= 1) {
