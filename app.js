@@ -523,10 +523,10 @@ async function process_groupmsg(e) {
                         let t = new Date();
                         
                         msg_say(e, "www也揉揉"+e.sender.nickname+"的说"
-                        + ((t - loves[e.sender.user_id].pat_date > 1800000) ? "（好感度+1" : "")
+                        + ((t - loves[e.sender.user_id].pat_date > 1800000 || typeof loves[e.sender.user_id].pat_date == 'string') ? "（好感度+1" : "")
                         , 2000);
                         // 这样写是为了防止一直刷揉揉
-                        if (t - loves[e.sender.user_id].pat_date > 1800000) {
+                        if (t - loves[e.sender.user_id].pat_date > 1800000 || typeof loves[e.sender.user_id].pat_date == 'string') {
                             loves[e.sender.user_id].data += 1;
                         }
                         loves[e.sender.user_id].pat_date = t;
@@ -606,18 +606,13 @@ async function process_groupmsg(e) {
                 }],
                 ["投喂", res => {
                     let t = new Date();
-                    if (t - loves[e.sender.user_id].feed_date < 3600000) {
-                        msg_say(e, "谢谢，但是琳酱已经吃过啦！请一小时后再来哦", 500);
-                        return -1;
-                    } else {
-                        const msglist = generate_feed_food(res.left);
-                        parse_msglist(e, msglist, item => {
-                            let loveadd = item[2], eaten = item[3];
-                            if (t - loves[e.sender.user_id].feed_date < 3600000) {loves[e.sender.user_id].data += loveadd;}
-                            if (eaten == true) loves[e.sender.user_id].feed_date = t;
-                        });
-                        
-                    }
+                    const msglist = generate_feed_food(res.left);
+                    parse_msglist(e, msglist, item => {
+                        let loveadd = item[2], eaten = item[3];
+                        if (t - loves[e.sender.user_id].feed_date < 3600000 || typeof loves[e.sender.user_id].feed_date == 'string') {loves[e.sender.user_id].data += loveadd;}
+                        if (eaten == true) loves[e.sender.user_id].feed_date = t;
+                    });
+                   
                     
                 }],
                 [". ", function() {
@@ -776,7 +771,7 @@ async function process_groupmsg(e) {
             if (loves[e.sender.user_id].data >= 50) {
                 let timenow = new Date();
                 // 自动早晚安
-                if (loves[e.sender.user_id].greeting == undefined || timenow - loves[e.sender.user_id].greeting > 3600000 * 3) {
+                if (loves[e.sender.user_id].greeting == undefined || typeof loves[e.sender.user_id].greeting == 'string'|| timenow - loves[e.sender.user_id].greeting > 3600000 * 3) {
                     if (timenow.getHours() >= 23 || timenow.getHours() <= 2) {
                         loves[e.sender.user_id].greeting = timenow;
                         msg_say(e, `很晚了呢，揉揉${e.sender.nickname}，该睡觉啦w，不要熬夜哦`, 1000);
