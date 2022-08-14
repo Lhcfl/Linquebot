@@ -69,8 +69,8 @@ class redbag {
             }
         }
         let tmp = this.redbags[this.redbags.length - 1];
-        this.redbags.pop();
         if (this.redbags.length > 1) {
+            this.redbags.pop();
             this.taken[e.sender.user_id] = true
             this.takelist.push({
                 name: e.sender.nickname,
@@ -81,6 +81,12 @@ class redbag {
                 msg: [[`${e.sender.nickname}打开了${this.from}的红包并获得${tmp}点好感`, 500]]
             }
         } else {
+            this.redbags.pop();
+            this.taken[e.sender.user_id] = true
+            this.takelist.push({
+                name: e.sender.nickname,
+                coin: tmp
+            })
             this.takelist.sort( (a,b) => {return b.coin - a.coin;})
             return {
                 coin: tmp,
