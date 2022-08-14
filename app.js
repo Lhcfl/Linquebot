@@ -647,7 +647,7 @@ async function process_groupmsg(e) {
                     
                 }],
                 [".jrrp", res => {
-                    msg_say(e,`${e.sender.nickname}的今日人品是：${Math.round(random_seed(hash_string((new Date()).toDateString() + (res.left) + e.sender.user_id + e.sender.nickname)) * 100)} of 100`, 4000);
+                    msg_say(e,`${e.sender.nickname}的今日人品是：${Math.round(random_seed(hash_string((new Date()).toDateString() + (res.left) + e.sender.user_id + e.sender.nickname)) * 100)}`, 4000);
                 }],
                 ["!查询好感度", function() {
                     
