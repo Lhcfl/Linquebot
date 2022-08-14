@@ -701,12 +701,14 @@ async function process_groupmsg(e) {
                         ["redbag ", res => {
                             const msgobj = game_group[e.group_id].rb.gen_redbag(e, res.left, c => loves[e.sender.user_id].data > c);
                             msg_say(e, msgobj.word, 500);
+                            if (isNaN(msgobj.coin) || msgobj.coin == undefined) {return;}
                             loves[e.sender.user_id].data -= msgobj.coin;
                         }],
                         
                         ["!redbag", () => {
                             const msgobj = game_group[e.group_id].rb.take_redbag(e)
                             parse_msglist(e, msgobj.msg)
+                            if (isNaN(msgobj.coin) || msgobj.coin == undefined) {return;}
                             loves[e.sender.user_id].data += msgobj.coin;
                         }],
                         

@@ -27,21 +27,29 @@ class redbag {
             this.clear();
             let [coin, num] = arg.split(" ");
             num = Math.abs(Number(num)); coin = Math.abs(Number(coin));
+            if (num > 20) {
+                return {
+                    success: false,
+                    coin: 0,
+                    word: `包红包失败：数量过高`
+                }
+            }
             if (check_func(coin)) {
                 this.from = e.sender.nickname;
                 if (num <= 1) {
                     this.redbags.push(coin);
+                } else {
+                    let listin = [];
+                    for (let i = 1; i < num; i++) {
+                        listin.push(Math.random() * coin);    
+                    }
+                    listin.sort( (a,b) => a-b )
+                    this.redbags.push(listin[0]);
+                    for (let i = 1; i < listin.length - 1; i++) {
+                        this.redbags.push(listin[i]-listin[i-1]);
+                    }
+                    this.redbags.push(coin - listin.pop())
                 }
-                let listin = [];
-                for (let i = 1; i < num; i++) {
-                    listin.push(Math.random() * coin);    
-                }
-                listin.sort( (a,b) => a-b )
-                this.redbags.push(listin[0]);
-                for (let i = 1; i < listin.length - 1; i++) {
-                    this.redbags.push(listin[i]-listin[i-1]);
-                }
-                this.redbags.push(coin - listin.pop())
                 return {
                     success: true,
                     coin: coin,
