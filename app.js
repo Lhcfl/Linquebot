@@ -609,7 +609,7 @@ async function process_groupmsg(e) {
                     const msglist = generate_feed_food(res.left);
                     parse_msglist(e, msglist, item => {
                         let loveadd = item[2], eaten = item[3];
-                        if (t - loves[e.sender.user_id].feed_date < 3600000 || typeof loves[e.sender.user_id].feed_date == 'string') {loves[e.sender.user_id].data += loveadd;}
+                        if (t - loves[e.sender.user_id].feed_date < 3600000) {loves[e.sender.user_id].data += loveadd;}
                         if (eaten == true) loves[e.sender.user_id].feed_date = t;
                     });
                    

@@ -78,9 +78,11 @@ function get_job() {
 
 class namefight {
     players = {};
+    player_num = 0
     join_date = new Date();
     gaming = false;
     clear() {
+        this.player_num = 0;
         this.players = {};
         this.join_date = new Date();
         this.play_date = new Date();
@@ -109,23 +111,26 @@ class namefight {
             this.players[name].id = id++;
         }
     }
+    force_open() {
+        if (this.gaming == 'preparing') {
+            this.gaming = true;
+            this.distribute();
+        }
+    }
     start_game(e) {
         if (this.gaming == true) {
             return [[`现在正在游戏哦`, 500]]
         } else if (this.gaming == false) {
             this.clear();
             this.gaming = "preparing";
-            this.join(e);
-            return [[`已开始游戏。你有5min的时间召集游戏参加者（人数>=2）`, 500], this.join_player(e)];
+            return [[`已准备游戏。你有5min的时间召集游戏参加者（人数>=2）`, 500], this.join_player(e)];
         } else {
-            this.join(e);
+            let msg = this.join(e);
             if (new Date() - this.join_date > 300000) { 
                 this.gaming = true;
                 this.distribute();
-                
             }
-            
-            return 
+            return [msg]; 
         }
 
         
