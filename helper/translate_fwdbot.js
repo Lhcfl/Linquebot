@@ -1,5 +1,6 @@
 // Thanks Virginia Senioria(91khr)'s help! --Linca(Lhc_fl)
 // Code writed by Senioria
+/** @type import("oicq") */
 
 /** 把转发bot的话翻译成人话, 就地转换.
  *
@@ -30,5 +31,10 @@ export function translate_fwdbot (e, sd) {
         
         e.sender.nickname = matched[1];
         e.raw_message = matched[2];
+    }
+    const botinfo = e.message.find((v) => v.type === "mirai");
+    if (botinfo) {
+        e.tg_id = JSON.parse(botinfo.data)?.id;
+        e.raw_messag = e.raw_message.replace(/{[^}]*}$/, "");
     }
 }
