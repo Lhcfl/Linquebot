@@ -7,8 +7,11 @@
  * @returns func's return
  */
 
+export function parse_cmd(rawmsg, cmdlist) {
+    parse_cmd_impl(rawmsg, cmdlist).catch((e) => console.error(e));
+}
 
-export async function parse_cmd(rawmsg, cmdlist) {
+async function parse_cmd_impl(rawmsg, cmdlist) {
     for (const [cmd, func] of cmdlist) {
         if (typeof cmd == "string") {
             if (cmd[0] != '!') {
