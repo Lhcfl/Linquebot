@@ -102,7 +102,7 @@ class redbag {
                 }
             } else {
                 this.redbags.pop();
-                this.taken[e.sender.user_id] = true
+                this.taken[e.sender.user_id] = true;
                 this.takelist.push({
                     name: e.sender.nickname,
                     coin: tmp
