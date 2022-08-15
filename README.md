@@ -25,8 +25,16 @@ git clone https://github.com/Lhcfl/Linquebot.git
 npm install
 ```
 
+修改settings.yml
+```
+cp settings.example.yml settings.yml
+vim settings.yml
+```
+
 直接运行app.js!
 
 ```
 node app.js
 ```
+
+更多帮助
