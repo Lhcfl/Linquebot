@@ -47,7 +47,7 @@ class redbag {
                     this.redbags.push(coin);
                 } else {
                     let listin = [];
-                    for (let i = 1; i < num; i++) {
+                    for (let i = 1; i <= num; i++) {
                         listin.push(Math.random() * coin);    
                     }
                     listin.sort( (a,b) => a-b )
