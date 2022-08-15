@@ -35,5 +35,6 @@ export function translate_fwdbot (e, sd) {
     const botinfo = e.message.find((v) => v.type === "mirai");
     if (botinfo) {
         e.tg_id = JSON.parse(botinfo.data)?.id;
+        e.raw_messag = e.raw_message.replace(/{[^}]*}$/, "");
     }
 }
