@@ -37,4 +37,4 @@ vim settings.yml
 node app.js
 ```
 
-更多帮助
+更多帮助请参见wiki
