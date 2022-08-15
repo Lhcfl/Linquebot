@@ -609,11 +609,9 @@ async function process_groupmsg(e) {
                     const msglist = generate_feed_food(res.left);
                     parse_msglist(e, msglist, item => {
                         let loveadd = item[2], eaten = item[3];
-                        if (t - loves[e.sender.user_id].feed_date > 3600000) {loves[e.sender.user_id].data += loveadd;}
+                        if (typeof loves[e.sender.user_id].feed_date == 'string' || t - loves[e.sender.user_id].feed_date > 3600000) {loves[e.sender.user_id].data += loveadd;}
                         if (eaten == true) loves[e.sender.user_id].feed_date = t;
                     });
-                   
-                    
                 }],
                 [". ", function() {
                     if (e.raw_message.indexOf("智障") != -1 && !auth(e) && e.raw_message.indexOf("不") == -1) {
