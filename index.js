@@ -38,7 +38,7 @@ import { jielong } from "./components/Chenyu.js";
 import { Cidian_query } from "./components/Cidian.js";
 import { hash_string, random_seed } from "./helper/seed_random.js";
 import { redbag } from "./components/redbag.js";
-let segment = () => ({});
+let segment = {};
 
 /**
  * 检查消息所在的群组是否启用了bot.
