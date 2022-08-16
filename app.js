@@ -203,7 +203,7 @@ function user_on_accesslist(e) {
 }
 
 function repeat(e) {
-    if (groups[e.group_id].repeatable == true) {
+    if (groups[e.group_id].repeatable == true && e.raw_message[0]!="." && e.raw_message.slice(0,2) != "投喂" && e.raw_message != "琳酱说说话") {
         if (groups[e.group_id].preword1 == groups[e.group_id].preword2 && e.raw_message == groups[e.group_id].preword1 && (e.message[0].type == "text" || e.message[0].type == "image")) {
             groups[e.group_id].preword1 = "";
             groups[e.group_id].preword2 = "";
