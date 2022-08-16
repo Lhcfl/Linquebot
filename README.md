@@ -1,6 +1,6 @@
 # Linquebot
 
-A QQ bot
+基于[oicq](https://github.com/takayama-lily/oicq)实现的群聊qq机器人
 
 Linquebot是一个看起来很聪明的人工智障（？
 这个实例名字定为琳酱
