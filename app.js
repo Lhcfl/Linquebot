@@ -153,6 +153,7 @@ function enter_new_group(e) {
             pre_said: [], // Bot上句话
             preword1: "",
             preword2: "",
+            repeatable: true,
         }
     }
     // games
@@ -202,13 +203,17 @@ function user_on_accesslist(e) {
 }
 
 function repeat(e) {
-    if (groups[e.group_id].preword1 == groups[e.group_id].preword2 && e.raw_message == groups[e.group_id].preword1 && (e.message[0].type == "text" || e.message[0].type == "image")) {
-        groups[e.group_id].preword1 = "";
-        groups[e.group_id].preword2 = "";
-        msg_say(e, e.message, 300);
+    if (groups[e.group_id].repeatable == true) {
+        if (groups[e.group_id].preword1 == groups[e.group_id].preword2 && e.raw_message == groups[e.group_id].preword1 && (e.message[0].type == "text" || e.message[0].type == "image")) {
+            groups[e.group_id].preword1 = "";
+            groups[e.group_id].preword2 = "";
+            msg_say(e, e.message, 300);
+        } else {
+            groups[e.group_id].preword2 = groups[e.group_id].preword1;
+            groups[e.group_id].preword1 = e.raw_message;
+        }
     } else {
-        groups[e.group_id].preword2 = groups[e.group_id].preword1;
-        groups[e.group_id].preword1 = e.raw_message;
+        groups[e.group_id].preword2 = groups[e.group_id].preword1 = 114514; // 任意一个不可能是字符串的量
     }
 }
 
@@ -334,7 +339,16 @@ async function process_groupmsg(e) {
                     }],
                     ["!nuclear", function() {
                         msg_say(e, "boom！！！！！！", 100);
-                    }]
+                    }],
+                    ["!repeat", function() {
+                        groups[e.group_id].repeatable = true;
+                        msg_say(e, "已打开复读", 100);
+                    }],
+                    ["!norepeat", function() {
+                        groups[e.group_id].repeatable = false;
+                        msg_say(e, "已关闭复读", 100);
+                    }],
+                    
                 ])
             }],
             [".authoff ", function() {

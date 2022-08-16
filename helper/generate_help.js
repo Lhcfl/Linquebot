@@ -13,6 +13,8 @@ var helper = {
 ' admin': [[`OoO这里是linca喂养的人工智障琳的管理员指南
 .bot clear清除bot历史
 .bot cc 撤回bot的上一句话
+.bot norepeat 关闭复读
+.bot repeat 打开复读
 .ban @某人 禁止其对bot使用权
 .deban @某人 恢复其对bot使用权
 .auth @某人 授予其对bot管理权
