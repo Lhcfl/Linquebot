@@ -19,8 +19,9 @@
   "scripts": {
     "test": "node --test $(find dist/tests -name '*.js')",
     "build": "tsc",
+    "deploy": "git pull -f && node app.js",
     "lint": "eslint . --ext .js,.ts",
-    "run": "node dist/app.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
