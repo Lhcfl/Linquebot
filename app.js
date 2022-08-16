@@ -2,7 +2,7 @@
 import fs from "fs";
 import yaml from "js-yaml";
 import { Markov } from "./components/Markov.js";
-import { createClient, segment } from "oicq";
+import { createClient, segment } from "./frame.js";
 
 
 let setting_data = yaml.load(fs.readFileSync('./settings.yml'));
@@ -24,22 +24,22 @@ load_database();
 
 
 // 客户端登录
-client.on("system.online", () => console.log("Logged in!"));
+// client.on("system.online", () => console.log("Logged in!"));
 
 
-if (setting_data.QRCode){
-    client.on("system.login.qrcode", function () {
-        console.log("扫码后按回车登录");
-        process.stdin.once("data", () => {
-          this.login();
-        })
-    }).login();
-} else {
-    client.on("system.login.slider", function () {
-        console.log("输入ticket：")
-        process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
-    }).login(setting_data.password)
-}
+// if (setting_data.QRCode){
+//     client.on("system.login.qrcode", function () {
+//         console.log("扫码后按回车登录");
+//         process.stdin.once("data", () => {
+//           this.login();
+//         })
+//     }).login();
+// } else {
+//     client.on("system.login.slider", function () {
+//         console.log("输入ticket：")
+//         process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
+//     }).login(setting_data.password)
+// }
 
 
 
