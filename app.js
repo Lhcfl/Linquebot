@@ -16,30 +16,10 @@ let sayings = [];
 let game_group = {};
 const account = setting_data.account;
 const bot_owner = setting_data.bot_owner;
-const client = createClient(account);
 let mk = new Markov();
 
 // 文件加载
 load_database();
-
-
-// 客户端登录
-client.on("system.online", () => console.log("Logged in!"));
-
-
-if (setting_data.QRCode){
-    client.on("system.login.qrcode", function () {
-        console.log("扫码后按回车登录");
-        process.stdin.once("data", () => {
-          this.login();
-        })
-    }).login();
-} else {
-    client.on("system.login.slider", function () {
-        console.log("输入ticket：")
-        process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
-    }).login(setting_data.password)
-}
 
 
 
@@ -270,15 +250,6 @@ function parse_msglist(e, msglist, extra_func) {
 }
 
 // client监控区
-
-// 戳一戳
-client.on("notice.group.poke", function (e) {
-
-    if (e.target_id === this.uin){
-        console.log(e);
-        e.group.pokeMember(e.operator_id);
-    }
-})
 
 /**
  * @param {GroupMessageEvent} e The event object.
@@ -878,12 +849,77 @@ async function process_groupmsg(e) {
     write_database();
 }
 
-client.on("message.group", async function(e) {
-    try {
-        await process_groupmsg(e);
+
+if (!setting_data.testing) {
+    // 客户端登录
+    const client = createClient(account);
+    client.on("system.online", () => console.log("Logged in!"));
+
+
+    if (setting_data.QRCode){
+        client.on("system.login.qrcode", function () {
+            console.log("扫码后按回车登录");
+            process.stdin.once("data", () => {
+                this.login();
+            })
+        }).login();
+    } else {
+        client.on("system.login.slider", function () {
+            console.log("输入ticket：")
+            process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
+        }).login(setting_data.password)
     }
-    catch (err) {
-        console.error(err);
+
+    // 戳一戳
+    client.on("notice.group.poke", function (e) {
+        if (e.target_id === this.uin){
+            console.log(e);
+            e.group.pokeMember(e.operator_id);
+        }
+    })
+
+    client.on("message.group", async function(e) {
+        try {
+            await process_groupmsg(e);
+        }
+        catch (err) {
+            console.error(err);
+        }
+    })
+}
+else {
+    let msgid = 0;
+    let msgseq = 0;
+
+    function sendMsg(msg) {
+        console.log(`sendMsg: ${JSON.stringify(msg)}`);
+        return { seq: ++msgseq, rand: 0 };
     }
-})
+
+    function makemsg(raw, msg) {
+        if (msg === undefined)
+            msg = [{ type: 'text', text: raw }];
+        const res = {
+            message: msg,
+            raw_message: raw,
+            sender: {
+                user_id: 114514,
+            },
+            group: {
+                sendMsg,
+            },
+        };
+        return res;
+    }
+    const { createInterface } = await import("readline");
+    const { stdin, stdout } = await import("process");
+
+    const rl = createInterface(stdin, stdout);
+    rl.setPrompt("> ");
+    rl.on("line", async (ln) => {
+        await process_groupmsg(makemsg(ln));
+        rl.prompt();
+    });
+    rl.prompt();
+}
 
