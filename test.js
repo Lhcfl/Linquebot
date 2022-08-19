@@ -11,7 +11,7 @@ Type your first message: `
 }, 200);
 
 export let segment = oicq.segment;
-export let testing = false;
+export let testing = true;
 let account;
 export let createClient = (uin, config) => {
     account = new events.EventEmitter();
@@ -21,14 +21,6 @@ export let createClient = (uin, config) => {
     console.log(`Your Account:${uin}, config:${config}`);
     return account;
 };
-
-// const readline = rdl.createInterface({
-//     input: process.stdin,
-//     output: process.stdout
-// })
-
-// let msg = "";
-
 
 
 process.stdin.on('readable', () => {
