@@ -37,4 +37,10 @@ vim settings.yml
 node app.js
 ```
 
+## 本地测试
+
+```
+node app.js test
+```
+
 更多帮助请参见wiki
