@@ -4,7 +4,7 @@ import yaml from "js-yaml";
 import { Markov } from "./components/Markov.js";
 
 let cliobj;
-if (process.argv[2] == undefined) {
+if (process.argv[2] != "test") {
     cliobj = await import("./frame.js");
 } else {
     cliobj = await import("./test.js");
@@ -35,19 +35,19 @@ load_database();
 client.on("system.online", () => console.log("Logged in!"));
 
 
-// if (setting_data.QRCode){
-//     client.on("system.login.qrcode", function () {
-//         console.log("扫码后按回车登录");
-//         process.stdin.once("data", () => {
-//           this.login();
-//         })
-//     }).login();
-// } else {
-//     client.on("system.login.slider", function () {
-//         console.log("输入ticket：")
-//         process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
-//     }).login(setting_data.password)
-// }
+if (setting_data.QRCode){
+    client.on("system.login.qrcode", function () {
+        console.log("扫码后按回车登录");
+        process.stdin.once("data", () => {
+          this.login();
+        })
+    }).login();
+} else {
+    client.on("system.login.slider", function () {
+        console.log("输入ticket：")
+        process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
+    }).login(setting_data.password)
+}
 
 
 
@@ -760,8 +760,8 @@ async function process_groupmsg(e) {
                 [".query ", res => {
                     msg_say(e, Cidian_query(res.left), 500);
                 }],
-                [".du ", res=> {
-                    let du_num = Number(res);
+                [".du ", res => {
+                    let du_num = Number(res.left);
                     if (isNaN(du_num) || du_num < 0) { msg_say(e, "数字错误", 500); }
                     else if (loves[e.sender.user_id].data < du_num) {
                         if (loves[e.sender.user_id].data >= 0) {
