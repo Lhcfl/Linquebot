@@ -767,7 +767,7 @@ async function process_groupmsg(e) {
                         if (loves[e.sender.user_id].data >= 0) {
                             msg_say(e, "好感不足", 500);
                         } else {
-                            if (Math.random() < 0.5) {
+                            if (Math.random() < 0.5 || du_num > 100) {
                                 msg_say(e, `恭喜您获得了1点好感`, 500);
                                 loves[e.sender.user_id].data += 1;
                             } else {
