@@ -11,10 +11,13 @@ Type your first message: `
 }, 200);
 
 export let segment = oicq.segment;
-export let testing = true;
+export let testing = false;
 let account;
 export let createClient = (uin, config) => {
     account = new events.EventEmitter();
+    account.login = function() {
+        console.log("已登录测试环境");
+    }
     console.log(`Your Account:${uin}, config:${config}`);
     return account;
 };

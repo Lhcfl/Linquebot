@@ -676,6 +676,8 @@ async function process_groupmsg(e) {
                 ["!查询好感度", function() {
                     
                     let tmp = Math.round(loves[e.sender.user_id].data);
+                    if (loves[e.sender.user_id].data_dup == undefined) loves[e.sender.user_id].data_dup = 0;
+
                     const nondup = Math.round(tmp - loves[e.sender.user_id].data_dup);
                     msg_say(e,`琳酱对${e.sender.nickname}的好感度是${tmp}`, 500);
                     if (tmp == -114514)  {
@@ -683,8 +685,8 @@ async function process_groupmsg(e) {
                         loves[e.sender.user_id].data_dup = -1919810;
                         msg_say(e,`你怎么刷到这个臭死了的数字的？？`, 3000);
                     } else if (nondup < -1000) {
-                        msg_say("...", 500);
-                        msg_say(`${e.sender.nickname}、気持ち悪い`, 60000);
+                        msg_say(e, "...", 500);
+                        msg_say(e, `${e.sender.nickname}、気持ち悪い`, 6000);
                     } else if (tmp < -1000) {
                         loves[e.sender.user_id].data_dup = 0;
                         loves[e.sender.user_id].data = 0
@@ -777,7 +779,7 @@ async function process_groupmsg(e) {
                         if (loves[e.sender.user_id].data >= 0) {
                             msg_say(e, "好感不足", 500);
                         } else {
-                            if (Math.random() < 0.5 || du_num > 100) {
+                            if (Math.random() < 0.5* Math.random() || du_num > 100) {
                                 msg_say(e, `恭喜您获得了1点好感`, 500);
                                 loves[e.sender.user_id].data += 1;
                             } else {
@@ -787,7 +789,7 @@ async function process_groupmsg(e) {
                             }
                         }
                     } else {
-                        if (Math.random() < 0.5) {
+                        if (Math.random() < 0.5* Math.random()) {
                             msg_say(e, `恭喜您获得了${du_num}点好感`, 500);
                             loves[e.sender.user_id].data += du_num;
                         } else {
