@@ -11,7 +11,7 @@ if (process.argv[2] != "test") {
 }
 
 let { createClient, segment } = cliobj;
-
+console.log(cliobj);
 
 let setting_data = yaml.load(fs.readFileSync('./settings.yml'));
 console.log(setting_data);
@@ -34,20 +34,22 @@ load_database();
 // 客户端登录
 client.on("system.online", () => console.log("Logged in!"));
 
-
-if (setting_data.QRCode){
-    client.on("system.login.qrcode", function () {
-        console.log("扫码后按回车登录");
-        process.stdin.once("data", () => {
-          this.login();
-        })
-    }).login();
-} else {
-    client.on("system.login.slider", function () {
-        console.log("输入ticket：")
-        process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
-    }).login(setting_data.password)
+if (cliobj.testing == false) {
+    if (setting_data.QRCode){
+        client.on("system.login.qrcode", function () {
+            console.log("扫码后按回车登录");
+            process.stdin.once("data", () => {
+              this.login();
+            })
+        }).login();
+    } else {
+        client.on("system.login.slider", function () {
+            console.log("输入ticket：")
+            process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
+        }).login(setting_data.password)
+    }
 }
+
 
 
 
@@ -117,6 +119,7 @@ function load_database() {
     }
 }
 function write_database() {
+    if (cliobj.testing == true) {return;}
     fs.writeFile('libs/rules.json', JSON.stringify(groups),  function(err) {
         if (err) {
             return console.error(err);
@@ -309,6 +312,7 @@ async function process_groupmsg(e) {
         [".bot status", ()=>{
             msg_say(e,
             (groups[e.group_id].boton ? "bot处于打开状态" : "bot处于关闭状态") + "\n" +
+            (groups[e.group_id].repeatable ? "bot处于复读状态" : "bot不会复读内容") + "\n" +
             (groups[e.group_id].learn ? "bot正在学习语料" : "bot没在学习语料")
             ,100);}
         ],
@@ -775,8 +779,6 @@ async function process_groupmsg(e) {
                                 loves[e.sender.user_id].data -= du_num;
                             }
                         }
-                        
-
                     } else {
                         if (Math.random() < 0.5) {
                             msg_say(e, `恭喜您获得了${du_num}点好感`, 500);
