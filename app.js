@@ -2,7 +2,15 @@
 import fs from "fs";
 import yaml from "js-yaml";
 import { Markov } from "./components/Markov.js";
-import { createClient, segment } from "./frame.js";
+
+let cliobj;
+if (process.argv[2] == undefined) {
+    cliobj = await import("./frame.js");
+} else {
+    cliobj = await import("./test.js");
+}
+
+let { createClient, segment } = cliobj;
 
 
 let setting_data = yaml.load(fs.readFileSync('./settings.yml'));
@@ -24,7 +32,7 @@ load_database();
 
 
 // 客户端登录
-// client.on("system.online", () => console.log("Logged in!"));
+client.on("system.online", () => console.log("Logged in!"));
 
 
 // if (setting_data.QRCode){
@@ -665,7 +673,28 @@ async function process_groupmsg(e) {
                     
                     let tmp = Math.round(loves[e.sender.user_id].data);
                     msg_say(e,`琳酱对${e.sender.nickname}的好感度是${tmp}`, 500);
-                    if (tmp < -1) {
+                    if (tmp == -114514)  {
+                        loves[e.sender.user_id].data = -1919810
+                        msg_say(e,`你怎么刷到这个臭死了的数字的？？`, 3000);
+                    } else if (tmp < -1000) {
+                        loves[e.sender.user_id].data = 0
+                        msg_say(e,`琳酱对${e.sender.nickname}的好感度已经清零`, 500);
+                        msg_say(e,`没！ 想！ 到！ 吧！哈哈哈哈哈哈哈哈哈哈哈哈`, 3000);
+                    } else if (tmp < -900) {
+                        msg_say(e,`还差一点点~`, 3000);
+                    } else if (tmp < -700) {
+                        msg_say(e,`马上就要有有趣的东西了猜猜是什么？`, 3000);
+                    } else if (tmp < -600) {
+                        msg_say(e,`你猜琳酱还会说什么呢~`, 3000);
+                    } else if (tmp < -500) {
+                        msg_say(e,`后面有的哦~再刷一下？`, 3000);
+                    } else if (tmp < -400) {
+                        msg_say(e,`琳酱表示——猜猜后面还有内容吗？（笑`, 3000);
+                    } else if (tmp < -300) {
+                        msg_say(e,`琳酱表示——你是抖M吗！`, 3000);
+                    } else if (tmp < -100) {
+                        msg_say(e,`哇哦，你是故意的吗！`, 3000);
+                    } else if (tmp < -1) {
                         msg_say(e,`琳酱……其实对此不是很知道该说什么`, 3000);
                     } else if (tmp < 10) {
                         msg_say(e,`${e.sender.nickname}对于琳酱来说还有点陌生呢。但是美好的邂逅都是从一点点的萌芽开始，不是吗？`, 3000);
@@ -702,6 +731,8 @@ async function process_groupmsg(e) {
                         }
                         
                         
+                    } else if (tmp == 114514) {
+                        msg_say(e,`你是怎么刷到这个臭死了的数字的？？`, 3000);
                     }
                 }],
                 [".game ", res => {
@@ -728,6 +759,33 @@ async function process_groupmsg(e) {
                 }],
                 [".query ", res => {
                     msg_say(e, Cidian_query(res.left), 500);
+                }],
+                [".du ", res=> {
+                    let du_num = Number(res);
+                    if (isNaN(du_num) || du_num < 0) { msg_say(e, "数字错误", 500); }
+                    else if (loves[e.sender.user_id].data < du_num) {
+                        if (loves[e.sender.user_id].data >= 0) {
+                            msg_say(e, "好感不足", 500);
+                        } else {
+                            if (Math.random() < 0.5) {
+                                msg_say(e, `恭喜您获得了1点好感`, 500);
+                                loves[e.sender.user_id].data += 1;
+                            } else {
+                                msg_say(e, `恭喜您又丢了${du_num}点好感`, 500);
+                                loves[e.sender.user_id].data -= du_num;
+                            }
+                        }
+                        
+
+                    } else {
+                        if (Math.random() < 0.5) {
+                            msg_say(e, `恭喜您获得了${du_num}点好感`, 500);
+                            loves[e.sender.user_id].data += du_num;
+                        } else {
+                            msg_say(e, `恭喜您白丢了${du_num}点好感`, 500);
+                            loves[e.sender.user_id].data -= du_num;
+                        }
+                    }
                 }]
 
             ]) == -1) { return }
