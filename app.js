@@ -676,11 +676,17 @@ async function process_groupmsg(e) {
                 ["!查询好感度", function() {
                     
                     let tmp = Math.round(loves[e.sender.user_id].data);
+                    const nondup = Math.round(tmp - loves[e.sender.user_id].data_dup);
                     msg_say(e,`琳酱对${e.sender.nickname}的好感度是${tmp}`, 500);
                     if (tmp == -114514)  {
                         loves[e.sender.user_id].data = -1919810
+                        loves[e.sender.user_id].data_dup = -1919810;
                         msg_say(e,`你怎么刷到这个臭死了的数字的？？`, 3000);
+                    } else if (nondup < -1000) {
+                        msg_say("...", 500);
+                        msg_say(`${e.sender.nickname}、気持ち悪い`, 60000);
                     } else if (tmp < -1000) {
+                        loves[e.sender.user_id].data_dup = 0;
                         loves[e.sender.user_id].data = 0
                         msg_say(e,`琳酱对${e.sender.nickname}的好感度已经清零`, 500);
                         msg_say(e,`没！ 想！ 到！ 吧！哈哈哈哈哈哈哈哈哈哈哈哈`, 3000);
@@ -777,6 +783,7 @@ async function process_groupmsg(e) {
                             } else {
                                 msg_say(e, `恭喜您又丢了${du_num}点好感`, 500);
                                 loves[e.sender.user_id].data -= du_num;
+                                loves[e.sender.user_id].data_dup -= du_num;
                             }
                         }
                     } else {
