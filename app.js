@@ -117,7 +117,7 @@ function load_database() {
     }
 }
 function write_database() {
-    if (cliobj.testing == true) {return;}
+    if (cliobj.testing == true || setting_data.testing == true) {return;}
     fs.writeFile('libs/rules.json', JSON.stringify(groups),  function(err) {
         if (err) {
             return console.error(err);

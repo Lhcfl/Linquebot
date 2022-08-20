@@ -18,3 +18,5 @@ whitelist_groups: # 白名单
 
 blacklist_groups: #黑名单群
   - 19260917 # 群3
+
+testing: false # 设为true的时候一定不写数据库。
