@@ -1,7 +1,7 @@
 # Linquebot
 
 最初基于[oicq](https://github.com/takayama-lily/oicq)实现的多平台群聊机器人  
-目前已支持tg、qq、本地（test）
+目前已原生支持tg、qq、本地（test）
 
 > Linquebot是一个看起来很聪明的人工智障（？
 > 这个实例名字定为琳酱

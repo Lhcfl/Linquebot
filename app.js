@@ -756,7 +756,8 @@ async function process_groupmsg(e) {
                             msg_say(e, msgobj.word, 500);
                         }],
                         ["redbag ", res => {
-                            const msgobj = game_group[e.group_id].rb.gen_redbag(e, res.left, c => loves[e.sender.user_id].data > c);
+                            const msgobj = game_group[e.group_id].rb.gen_redbag(e, res.left, c => loves[e.sender.user_id].data > c && c <= 5);
+                            // 限制了好感度在5以内
                             msg_say(e, msgobj.word, 500);
                             if (isNaN(msgobj.coin) || msgobj.coin == undefined) {return;}
                             loves[e.sender.user_id].data -= msgobj.coin;
@@ -774,32 +775,34 @@ async function process_groupmsg(e) {
                 [".query ", res => {
                     msg_say(e, Cidian_query(res.left), 500);
                 }],
-                [".du ", res => {
-                    let du_num = Number(res.left);
-                    if (isNaN(du_num) || du_num < 0) { msg_say(e, "数字错误", 500); }
-                    else if (loves[e.sender.user_id].data < du_num) {
-                        if (loves[e.sender.user_id].data >= 0) {
-                            msg_say(e, "好感不足", 500);
-                        } else {
-                            if (Math.random() < 0.5* Math.random() || du_num > 100) {
-                                msg_say(e, `恭喜您获得了1点好感`, 500);
-                                loves[e.sender.user_id].data += 1;
-                            } else {
-                                msg_say(e, `恭喜您又丢了${du_num}点好感`, 500);
-                                loves[e.sender.user_id].data -= du_num;
-                                loves[e.sender.user_id].data_dup -= du_num;
-                            }
-                        }
-                    } else {
-                        if (Math.random() < 0.5* Math.random()) {
-                            msg_say(e, `恭喜您获得了${du_num}点好感`, 500);
-                            loves[e.sender.user_id].data += du_num;
-                        } else {
-                            msg_say(e, `恭喜您白丢了${du_num}点好感`, 500);
-                            loves[e.sender.user_id].data -= du_num;
-                        }
-                    }
-                }]
+                // 【赌】功能：.du [好感额] 以25%的赢率得到该额，或者75%情况下输掉。
+                // 由于测试中严重破坏了养成性，将其删去。
+                // [".du ", res => {
+                //     let du_num = Number(res.left);
+                //     if (isNaN(du_num) || du_num < 0) { msg_say(e, "数字错误", 500); }
+                //     else if (loves[e.sender.user_id].data < du_num) {
+                //         if (loves[e.sender.user_id].data >= 0) {
+                //             msg_say(e, "好感不足", 500);
+                //         } else {
+                //             if (Math.random() < 0.5* Math.random() || du_num > 100) {
+                //                 msg_say(e, `恭喜您获得了1点好感`, 500);
+                //                 loves[e.sender.user_id].data += 1;
+                //             } else {
+                //                 msg_say(e, `恭喜您又丢了${du_num}点好感`, 500);
+                //                 loves[e.sender.user_id].data -= du_num;
+                //                 loves[e.sender.user_id].data_dup -= du_num;
+                //             }
+                //         }
+                //     } else {
+                //         if (Math.random() < 0.5* Math.random()) {
+                //             msg_say(e, `恭喜您获得了${du_num}点好感`, 500);
+                //             loves[e.sender.user_id].data += du_num;
+                //         } else {
+                //             msg_say(e, `恭喜您白丢了${du_num}点好感`, 500);
+                //             loves[e.sender.user_id].data -= du_num;
+                //         }
+                //     }
+                // }]
 
             ]) == -1) { return }
             //parse end
