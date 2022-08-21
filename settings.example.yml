@@ -1,7 +1,8 @@
 # 复制它，改成settings.yml
 
 account: 123456789 # 你的bot账号，qq则为qq号，tg则为taken
-password: yourpassword
+uin: 123456789 # 对于qq，是qq号；对于tg，是tg用户名
+password: yourpassword # qq密码，如果tg或者二维码可以乱填
 QRCode: false # 设为true则二维码登录（增加封号风险）
 
 mod: qq # 可选qq, telegram, test。

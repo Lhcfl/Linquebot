@@ -61,7 +61,9 @@ export let createClient = (token, config) => {
                         let msg_to_send = "";
                         if (typeof words == 'object') {
                             for (const txt of words) {
-                                if (txt.type == 'at') {
+                                if (typeof txt == 'string') {
+                                    msg_to_send += txt;
+                                } else if (txt.type == 'at') {
                                     msg_to_send += `@${txt.qq}`;
                                 } else if (txt.type == "text") {
                                     msg_to_send += txt.text;
@@ -93,8 +95,25 @@ export let createClient = (token, config) => {
                         if (i!=0 && msg.entities[i-1].type == 'mention' && e.raw_message.slice(msg.entities[i-1].offset+msg.entities[i-1].length, msg.entities[i].offset) != '') { 
                             e.message.push(e.raw_message.slice(msg.entities[i-1].offset+msg.entities[i-1].length, msg.entities[i].offset));
                         }
-                        e.message.push(segment.at(e.raw_message.slice(msg.entities[i].offset+1, msg.entities[i].offset + msg.entities[i].length)))
+                        e.message.push({
+                            type: 'at',
+                            qq: e.raw_message.slice(msg.entities[i].offset+1, msg.entities[i].offset + msg.entities[i].length)
+                        })
                     }
+                }
+                if (msg.entities[msg.entities.length-1].type == 'mention') {
+                    e.message.push({
+                        type: 'text',
+                        text: e.raw_message.slice(msg.entities[msg.entities.length-1].offset+msg.entities[msg.entities.length-1].length+1, e.raw_message.length)
+                    })
+                }
+                if (e.message == []) {
+                    e.message = [
+                        {
+                            text: msg.text,
+                            type: "text"
+                        }
+                    ]
                 }
             }
             console.log(msg); console.log("Translated:"); console.log(e); console.log("----------------");

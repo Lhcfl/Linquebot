@@ -20,7 +20,7 @@ if (process.argv[2] != undefined) {
 }
 
 let { createClient, segment } = cliobj;
-console.log(cliobj);
+
 // 变量区
 let senicount = 1.00;
 let groups = {};
@@ -456,8 +456,8 @@ async function process_groupmsg(e) {
         let someone_at_me = false;
         repeat(e);
 
-        for (let msgid in e.message) {
-            if (e.message[msgid].qq == account) {
+        for (let msgid of e.message) {
+            if (msgid.qq == setting_data.uin) {
                 someone_at_me = true;
             }
         }
