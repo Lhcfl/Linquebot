@@ -75,7 +75,7 @@ export let createClient = (token, config) => {
                         } else {
                             msg_to_send = words
                         }
-                        if (msg_to_send != "") console.log(bot.sendMessage(msg.chat.id, msg_to_send));
+                        if (msg_to_send != "") bot.sendMessage(msg.chat.id, msg_to_send);
                         return {
                             seq: "seq"+Math.random(),
                             rand: Math.random()
@@ -118,7 +118,7 @@ export let createClient = (token, config) => {
                         text: tmp_text
                     })
                 }
-                if (e.message == []) {
+                if (e.message.length == 0) {
                     e.message = [
                         {
                             text: msg.text,
