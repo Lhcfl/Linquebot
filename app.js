@@ -3,18 +3,22 @@ import fs from "fs";
 import yaml from "js-yaml";
 import { Markov } from "./components/Markov.js";
 
-let cliobj;
-if (process.argv[2] != "test") {
-    cliobj = await import("./frame.js");
-} else {
-    cliobj = await import("./test.js");
-}
-
 let { createClient, segment } = cliobj;
 console.log(cliobj);
 
 let setting_data = yaml.load(fs.readFileSync('./settings.yml'));
 console.log(setting_data);
+
+let cliobj;
+if (process.argv[2] != undefined) {
+    try {
+        cliobj = await import(`./mods/${process.argv[2]}.js`);
+    } catch (error) {
+        cliobj = await import(`./mods/${setting_data.mod}.js`);
+    }
+} else {
+    cliobj = await import(`./mods/${setting_data.mod}.js`);
+}
 
 // 变量区
 let senicount = 1.00;

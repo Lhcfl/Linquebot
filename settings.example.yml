@@ -1,9 +1,10 @@
 # 复制它，改成settings.yml
 
-account: 123456789 # 你的bot账号
+account: 123456789 # 你的bot账号，qq则为qq号，tg则为taken
 password: yourpassword
 QRCode: false # 设为true则二维码登录（增加封号风险）
 
+mod: qq # 可选qq, telegram, test。
 
 bot_owner: 114514 # 作为bot拥有者的你的账号
 
