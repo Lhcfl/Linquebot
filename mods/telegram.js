@@ -64,7 +64,8 @@ export let createClient = (token, config) => {
                                 if (typeof txt == 'string') {
                                     msg_to_send += txt;
                                 } else if (txt.type == 'at') {
-                                    msg_to_send += `@${txt.qq}`;
+                                    if (txt.qq != 0) msg_to_send += `@${txt.qq}`;
+                                    else msg_to_send += `@${txt.id}`
                                 } else if (txt.type == "text") {
                                     msg_to_send += txt.text;
                                 } else if (txt.type == "image") {
@@ -93,7 +94,16 @@ export let createClient = (token, config) => {
                 for (let i in msg.entities) {
                     if (msg.entities[i].type == 'mention') {
                         if (i!=0 && msg.entities[i-1].type == 'mention' && e.raw_message.slice(msg.entities[i-1].offset+msg.entities[i-1].length, msg.entities[i].offset) != '') { 
-                            e.message.push(e.raw_message.slice(msg.entities[i-1].offset+msg.entities[i-1].length, msg.entities[i].offset));
+                            e.message.push({
+                                type: 'text',
+                                text: e.raw_message.slice(msg.entities[i-1].offset+msg.entities[i-1].length, msg.entities[i].offset)
+                            });
+                        }
+                        if (i==0 && e.raw_message.slice(0, msg.entities[i].offset) != '') { 
+                            e.message.push({
+                                type: 'text',
+                                text: e.raw_message.slice(0, msg.entities[i].offset)
+                            });
                         }
                         e.message.push({
                             type: 'at',
@@ -102,9 +112,10 @@ export let createClient = (token, config) => {
                     }
                 }
                 if (msg.entities[msg.entities.length-1].type == 'mention') {
-                    e.message.push({
+                    let tmp_text =  e.raw_message.slice(msg.entities[msg.entities.length-1].offset+msg.entities[msg.entities.length-1].length+1, e.raw_message.length);
+                    if (tmp_text != '') e.message.push({
                         type: 'text',
-                        text: e.raw_message.slice(msg.entities[msg.entities.length-1].offset+msg.entities[msg.entities.length-1].length+1, e.raw_message.length)
+                        text: tmp_text
                     })
                 }
                 if (e.message == []) {

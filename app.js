@@ -322,7 +322,7 @@ async function process_groupmsg(e) {
         [".status", function(){
             const saying_msg = [
                 segment.at(e.sender.user_id),
-                "您的bot状态是：\n禁用：",
+                " 您的bot状态是：\n禁用：",
                 (groups[e.group_id].bans[e.sender.user_id] == true ? "是" : "否"),
                 "\n管理：",
                 (auth(e) ? "是" : "否"),
@@ -371,9 +371,9 @@ async function process_groupmsg(e) {
                     groups[e.group_id].admins[e.message[1].qq] = false;
                     loves[e.message[1].qq].data -= 10;
                     const saying_msg = [
-                        "已经对",
+                        "已经对 ",
                         segment.at(e.message[1].qq),
-                        "撤销bot admin权限",
+                        " 撤销bot admin权限",
                     ]
                     msg_say(e, saying_msg, 100);
                 }
@@ -383,9 +383,9 @@ async function process_groupmsg(e) {
                     groups[e.group_id].admins[e.message[1].qq] = true;
                     loves[e.message[1].qq].data += 10;
                     const saying_msg = [
-                        "已经对",
+                        "已经对 ",
                         segment.at(e.message[1].qq),
-                        "授予bot admin权限",
+                        " 授予bot admin权限",
                     ]
                     msg_say(e, saying_msg, 100);
                 }
@@ -397,7 +397,7 @@ async function process_groupmsg(e) {
                     const saying_msg = [
                         "已经撤销",
                         segment.at(e.message[1].qq),
-                        "的bot使用权限",
+                        " 的bot使用权限",
                     ]
                     msg_say(e, saying_msg, 100);
                 }
@@ -408,7 +408,7 @@ async function process_groupmsg(e) {
                     const saying_msg = [
                         "已经恢复",
                         segment.at(e.message[1].qq),
-                        "的bot使用权限",
+                        " 的bot使用权限",
                     ]
                     msg_say(e, saying_msg, 100);
                 }
