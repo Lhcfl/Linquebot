@@ -3,8 +3,7 @@ import fs from "fs";
 import yaml from "js-yaml";
 import { Markov } from "./components/Markov.js";
 
-let { createClient, segment } = cliobj;
-console.log(cliobj);
+
 
 let setting_data = yaml.load(fs.readFileSync('./settings.yml'));
 console.log(setting_data);
@@ -20,6 +19,8 @@ if (process.argv[2] != undefined) {
     cliobj = await import(`./mods/${setting_data.mod}.js`);
 }
 
+let { createClient, segment } = cliobj;
+console.log(cliobj);
 // 变量区
 let senicount = 1.00;
 let groups = {};
