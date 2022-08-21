@@ -1,9 +1,10 @@
 # Linquebot
 
-基于[oicq](https://github.com/takayama-lily/oicq)实现的群聊qq机器人
+最初基于[oicq](https://github.com/takayama-lily/oicq)实现的多平台群聊机器人  
+目前已支持tg、qq、本地（test）
 
-Linquebot是一个看起来很聪明的人工智障（？
-这个实例名字定为琳酱
+> Linquebot是一个看起来很聪明的人工智障（？
+> 这个实例名字定为琳酱
 
 ----
 
@@ -37,10 +38,16 @@ vim settings.yml
 node app.js
 ```
 
-## 本地测试
+## 本地测试和平台切换
 
 ```
 node app.js test
+```
+
+使用tg：
+
+```
+node app.js telegram
 ```
 
 更多帮助请参见wiki
