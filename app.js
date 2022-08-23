@@ -467,7 +467,7 @@ async function process_groupmsg(e) {
         repeat(e);
 
         for (let msgid of e.message) {
-            if (msgid.qq == setting_data.uin) {
+            if (msgid.qq == setting_data.uin || msgid.qq == setting_data.account) {
                 someone_at_me = true;
             }
         }
