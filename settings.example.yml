@@ -5,6 +5,11 @@ uin: 123456789 # 对于qq，是qq号；对于tg，是tg用户名
 password: yourpassword # qq密码，如果tg或者二维码可以乱填
 QRCode: false # 设为true则二维码登录（增加封号风险）
 
+proxy: true
+proxy_address: "http://127.0.0.1:10809"
+# 对于tg的代理设置
+
+
 mod: qq # 可选qq, telegram, test。
 
 bot_owner: 114514 # 作为bot拥有者的你的账号

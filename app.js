@@ -39,19 +39,29 @@ load_database();
 // 客户端登录
 client.on("system.online", () => console.log("Logged in!"));
 
-if (setting_data.QRCode){
+if (setting_data.proxy != true) {
+    if (setting_data.QRCode){
+        client.on("system.login.qrcode", function () {
+            console.log("扫码后按回车登录");
+            process.stdin.once("data", () => {
+                this.login();
+            })
+        }).login();
+    } else {
+        client.on("system.login.slider", function () {
+            console.log("输入ticket：")
+            process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
+        }).login(setting_data.password)
+    }
+} else {
     client.on("system.login.qrcode", function () {
         console.log("扫码后按回车登录");
         process.stdin.once("data", () => {
             this.login();
         })
-    }).login();
-} else {
-    client.on("system.login.slider", function () {
-        console.log("输入ticket：")
-        process.stdin.once("data", ticket => this.submitSlider(String(ticket).trim()))
-    }).login(setting_data.password)
+    }).login(setting_data.proxy_address);
 }
+
 
 
 

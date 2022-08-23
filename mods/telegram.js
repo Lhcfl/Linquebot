@@ -32,13 +32,20 @@ Welcome to Linquebot Telegram mode
 let account;
 export let createClient = (token, config) => {
     account = new events.EventEmitter();
-    account.login = function() {
-        bot = new TelegramBot(token, {
-            polling: true,
-            request: {
-                agent: proxy("http://127.0.0.1:10809")
-            }
-        });
+    account.login = function(proxy_address) {
+        if (proxy_address != undefined) {
+            bot = new TelegramBot(token, {
+                polling: true,
+                request: {
+                    agent: proxy(proxy_address)
+                }
+            });
+        } else {
+            bot = new TelegramBot(token, {
+                polling: true
+            });
+        }
+        
         bot.on('message', (msg) => {
             if (msg.from.is_bot == true) return;
             // translate
