@@ -1,9 +1,10 @@
 # 复制它，改成settings.yml
 
 account: 123456789 # 你的bot账号，qq则为qq号，tg则为taken
-uin: 123456789 # 对于qq，是qq号；对于tg，是tg用户名
+
 password: yourpassword # qq密码，如果tg或者二维码可以乱填
 QRCode: false # 设为true则二维码登录（增加封号风险）
+platform: 4 # 参见oicq的platform设置。建议选择0~4。
 
 proxy: true
 proxy_address: "http://127.0.0.1:10809"
@@ -11,10 +12,10 @@ proxy_address: "http://127.0.0.1:10809"
 
 
 mod: qq # 可选qq, telegram, test。
+uin: 123456789 # 对于qq，是qq号；对于tg，是tg用户名
+bot_owner: 114514 # 作为bot拥有者的你的账号，qq填qq号，tg填id
 
-bot_owner: 114514 # 作为bot拥有者的你的账号
-
-senioria: 1234567 # 是seni的账号（x
+senioria: 1234567 # 是seni的账号，请勿过问（x
 
 
 whitelist: true # 白名单还是黑名单

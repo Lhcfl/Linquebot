@@ -29,7 +29,7 @@ let sayings = [];
 let game_group = {};
 const account = setting_data.account;
 const bot_owner = setting_data.bot_owner;
-const client = createClient(account, {platform: 4});
+const client = createClient(account, {platform: setting_data.platform == undefined? 4 : setting_data.platform});
 let mk = new Markov();
 
 // 文件加载
