@@ -651,9 +651,9 @@ async function process_groupmsg(e) {
                         let loveadd = item[2], eaten = item[3];
                         if (typeof loves[e.sender.user_id].feed_date == 'string' || t - loves[e.sender.user_id].feed_date > 3600000) {
                             loves[e.sender.user_id].data += loveadd;
-                            if (loveadd > 0 && word.slice(word.length-9) == "<!change>") {
+                            if (word.slice(word.length-9) == "<!change>") {
                                 word = word.slice(0, word.length-9);
-                                word += "好感度+" + String(loveadd);
+                                word += "好感度" + (loveadd > 0 ? "+": "") + String(loveadd);
                             }
                         }
                         if (word.slice(word.length-9) == "<!change>") {
