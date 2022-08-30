@@ -286,11 +286,11 @@ function msg_say(e, words, typing_time = 3000) {
     if(Math.random()<0.1) { discount_seni(); }
 }
 /**
- * @param {[[Msgtext, Number:delay, ?extra]]} msglist 
+ * @param {[[Msgtext, Number:delay, ?extra_func, Boolen:normal_say]]} msglist 
  */
-function parse_msglist(e, msglist, extra_func) {
+function parse_msglist(e, msglist, extra_func = undefined, print = true) {
     for (const i of msglist) {
-        msg_say(e, i[0], i[1] != undefined ? i[1] : 3000);
+        if (print) msg_say(e, i[0], i[1] != undefined ? i[1] : 3000);
         if (extra_func != undefined) {
             extra_func(i);
         }
@@ -647,10 +647,21 @@ async function process_groupmsg(e) {
                     let t = new Date();
                     const msglist = generate_feed_food(res.left);
                     parse_msglist(e, msglist, item => {
+                        let word = item[0];
                         let loveadd = item[2], eaten = item[3];
-                        if (typeof loves[e.sender.user_id].feed_date == 'string' || t - loves[e.sender.user_id].feed_date > 3600000) {loves[e.sender.user_id].data += loveadd;}
+                        if (typeof loves[e.sender.user_id].feed_date == 'string' || t - loves[e.sender.user_id].feed_date > 3600000) {
+                            loves[e.sender.user_id].data += loveadd;
+                            if (loveadd > 0 && word.slice(word.length-9) == "<!change>") {
+                                word = word.slice(0, word.length-9);
+                                word += "好感度+" + String(loveadd);
+                            }
+                        }
+                        if (word.slice(word.length-9) == "<!change>") {
+                            word = word.slice(0, word.length-9);
+                        }
+                        msg_say(e, word, item[1]);
                         if (eaten == true) loves[e.sender.user_id].feed_date = t;
-                    });
+                    }, false);
                 }],
                 [". ", function() {
                     if (e.raw_message.indexOf("智障") != -1 && !auth(e) && e.raw_message.indexOf("不") == -1) {
