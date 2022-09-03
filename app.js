@@ -746,10 +746,11 @@ async function process_groupmsg(e) {
                         msg_say(e,`琳酱好喜欢${e.sender.nickname}！${e.sender.nickname}要记好了，${e.sender.nickname}可是琳酱我超级超级在意的人哦！！`, 3000);
                     } else if (tmp < 500) {
                         msg_say(e,`琳酱最喜欢${e.sender.nickname}啦！！！大好き大好き大好き大好き！！！`, 3000);
+                    } else if (tmp == 114514) {
+                        msg_say(e,`你是怎么刷到这个臭死了的数字的？？`, 3000);
                     } else if (tmp >= 500) {
 
                         if (loves[e.sender.user_id].biaobai == false) {
-                            
                             msg_say(e, `这是你第几次查询好感度了呢？${e.sender.nickname}`, 700);
                             msg_say(e, `${e.sender.nickname}…… 好想对你说什么呢`, 1000);
                             msg_say(e, `${e.sender.nickname}的存在，就是琳酱一直努力学习的动力`, 2000);
@@ -765,10 +766,6 @@ async function process_groupmsg(e) {
                             msg_say(e,`诶……你说上次那句？好羞耻，我不敢再说啦嘛`, 2000);
                             
                         }
-                        
-                        
-                    } else if (tmp == 114514) {
-                        msg_say(e,`你是怎么刷到这个臭死了的数字的？？`, 3000);
                     }
                 }],
                 [".game ", res => {
