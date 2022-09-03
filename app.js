@@ -4,6 +4,15 @@ import yaml from "js-yaml";
 import { Markov } from "./components/Markov.js";
 
 
+if (process.argv[2] == "--version") {
+    console.log(`Linquebot ${JSON.parse(fs.readFileSync('./package.json')).version}`);
+    console.log("本程序具有超级琳力");
+    process.exit(1);
+}
+
+
+
+
 
 let setting_data = yaml.load(fs.readFileSync('./settings.yml'));
 console.log(setting_data);
@@ -82,6 +91,8 @@ import { jielong } from "./components/Chenyu.js";
 import { Cidian_query } from "./components/Cidian.js";
 import { hash_string, random_seed } from "./helper/seed_random.js";
 import { redbag } from "./components/redbag.js";
+import { append } from "domutils";
+import { error } from "console";
 
 /**
  * 检查消息所在的群组是否启用了bot.
