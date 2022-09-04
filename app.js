@@ -17,14 +17,17 @@ if (process.argv[2] == "--version") {
 let setting_data = yaml.load(fs.readFileSync('./settings.yml'));
 console.log(setting_data);
 
-let cliobj;
+let cliobj, login_mod;
 if (process.argv[2] != undefined) {
     try {
+        login_mod = process.argv[2];
         cliobj = await import(`./mods/${process.argv[2]}.js`);
     } catch (error) {
+        login_mod = setting_data.mod;
         cliobj = await import(`./mods/${setting_data.mod}.js`);
     }
 } else {
+    login_mod = setting_data.mod;
     cliobj = await import(`./mods/${setting_data.mod}.js`);
 }
 
@@ -48,7 +51,7 @@ load_database();
 // 客户端登录
 client.on("system.online", () => console.log("Logged in!"));
 
-if (setting_data.proxy != true) {
+if (login_mod == 'qq') {
     if (setting_data.QRCode){
         client.on("system.login.qrcode", function () {
             console.log("扫码后按回车登录");
@@ -68,7 +71,7 @@ if (setting_data.proxy != true) {
         process.stdin.once("data", () => {
             this.login();
         })
-    }).login(setting_data.proxy_address);
+    }).login(setting_data.proxy, setting_data.proxy_address);
 }
 
 
