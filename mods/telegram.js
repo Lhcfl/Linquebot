@@ -32,8 +32,8 @@ Welcome to Linquebot Telegram mode
 let account;
 export let createClient = (token, config) => {
     account = new events.EventEmitter();
-    account.login = function(proxy, proxy_address) {
-        if (proxy == true && proxy_address != undefined) {
+    account.login = function(proxy_enabled, proxy_address) {
+        if (proxy_enabled == true && proxy_address != undefined) {
             bot = new TelegramBot(token, {
                 polling: true,
                 request: {
