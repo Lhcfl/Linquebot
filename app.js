@@ -71,7 +71,7 @@ if (login_mod == 'qq') {
         process.stdin.once("data", () => {
             this.login();
         })
-    }).login(setting_data.proxy, setting_data.proxy_address);
+    }).login(setting_data.proxy, setting_data.proxy_address, setting_data.uin);
 }
 
 

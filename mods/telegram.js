@@ -14,7 +14,6 @@ import proxy from 'proxy-agent';
 
 
 
-
 let bot;
 
 
@@ -30,7 +29,7 @@ Welcome to Linquebot Telegram mode
 }, 500);
 
 let account;
-export let createClient = (token, config) => {
+export let createClient = (token, config, uin) => {
     account = new events.EventEmitter();
     account.login = function(proxy_enabled, proxy_address) {
         if (proxy_enabled == true && proxy_address != undefined) {
@@ -92,6 +91,12 @@ export let createClient = (token, config) => {
                         bot.sendMessage(msg.chat.id, `抱歉：tg环境暂不支持撤回内容`);
                     }
                 },
+            }
+            if (msg.reply_to_message != undefined && msg.reply_to_message.from.username == uin) {
+                e.message.push({
+                    type: 'at',
+                    qq: uin
+                })
             }
             if (e.raw_message == undefined) {
                 e.message[0].text = e.raw_message = "[不支持的消息]";
