@@ -51,7 +51,7 @@ export let createClient = (token, config) => {
             let e = {
                 sender: {
                     user_id: msg.from.username,
-                    nickname: msg.from.first_name + msg.from.last_name != undefined ? msg.from.last_name : '',
+                    nickname: msg.from.first_name + (msg.from.last_name != undefined ? msg.from.last_name : ''),
                     role: "admin"
                 },
                 raw_message: msg.text,
@@ -93,10 +93,11 @@ export let createClient = (token, config) => {
                 },
             }
             if (msg.reply_to_message != undefined) {
-                e.message.push({
+                e.message.push(e.message[0]);
+                e.message[0] = {
                     type: 'at',
                     qq: msg.reply_to_message.from.username
-                });
+                };
             }
             if (e.raw_message == undefined) {
                 e.message[0].text = e.raw_message = "[不支持的消息]";
