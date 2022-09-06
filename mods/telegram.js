@@ -29,7 +29,7 @@ Welcome to Linquebot Telegram mode
 }, 500);
 
 let account;
-export let createClient = (token, config, uin) => {
+export let createClient = (token, config) => {
     account = new events.EventEmitter();
     account.login = function(proxy_enabled, proxy_address) {
         if (proxy_enabled == true && proxy_address != undefined) {
@@ -92,11 +92,11 @@ export let createClient = (token, config, uin) => {
                     }
                 },
             }
-            if (msg.reply_to_message != undefined && msg.reply_to_message.from.username == uin) {
+            if (msg.reply_to_message != undefined) {
                 e.message.push({
                     type: 'at',
-                    qq: uin
-                })
+                    qq: msg.reply_to_message.from.username
+                });
             }
             if (e.raw_message == undefined) {
                 e.message[0].text = e.raw_message = "[不支持的消息]";
