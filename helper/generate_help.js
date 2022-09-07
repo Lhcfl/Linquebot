@@ -27,7 +27,8 @@ var helper = {
 [`OoO这里是linca喂养的人工智障琳的命令列表
 系统：
 .bot off 关闭bot
-.learn off 关闭语料收集`, 500],
+.learn off 关闭语料收集
+.rename xxx 将自己改名为xxx`, 500],
 
 [`AI:
 .reply [句首] ai生成一句话
