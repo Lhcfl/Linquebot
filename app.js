@@ -199,6 +199,10 @@ function enter_new_group(e) {
             rb: new redbag()
         }
     }
+    // rename
+    if (groups[e.group_id].rename == undefined) {
+        groups[e.group_id].rename = {};
+    }
 }
 
 function add_saying(e) {
@@ -332,7 +336,9 @@ async function process_groupmsg(e) {
     translate_fwdbot(e, setting_data);
     console.log(group_on_accesslist(e) ? " " : "未列入白名单或被列入黑名单的群");
     if (group_on_accesslist(e) != true) { return; }
-
+    if (groups[e.group_id].rename[e.sender.user_id] != undefined) {
+        e.sender.nickname = groups[e.group_id].rename[e.sender.user_id];
+    }
     parse_cmd(e.raw_message, [
         [".bot status", ()=>{
             msg_say(e,
@@ -846,6 +852,15 @@ async function process_groupmsg(e) {
                     //         loves[e.sender.user_id].data -= du_num;
                     //     }
                     // }
+                }],
+                [".rename ", res => {
+                    if (res.left != 'null') {
+                        groups[e.group_id].rename[e.sender.user_id] = res.left;
+                        msg_say(e, `改名成功，您的新名字是${res.left}`, 500);    
+                    } else {
+                        groups[e.group_id].rename[e.sender.user_id] = undefined;
+                        msg_say(e, `重命名已重置。`, 500);   
+                    }
                 }]
 
             ]) == -1) { return }

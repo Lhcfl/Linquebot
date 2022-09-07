@@ -51,7 +51,7 @@ export let createClient = (token, config) => {
             let e = {
                 sender: {
                     user_id: msg.from.username,
-                    nickname: msg.from.first_name + (msg.from.last_name != undefined ? msg.from.last_name : ''),
+                    nickname: msg.from.first_name + (msg.from.last_name != undefined ? " " + msg.from.last_name : ''),
                     role: "admin"
                 },
                 raw_message: msg.text,
