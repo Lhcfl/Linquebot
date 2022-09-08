@@ -75,19 +75,22 @@ export let createClient = (token, config) => {
                                 } else if (txt.type == "text") {
                                     msg_to_send += txt.text;
                                 } else if (txt.type == "image") {
-                                    bot.sendPhoto(msg.chat.id, txt.file);
+                                    return { 
+                                        seq: bot.sendPhoto(msg.chat.id, txt.file),
+                                        rand: Math.random()
+                                    };
                                 }
                             }
                         } else {
                             msg_to_send = words
                         }
-                        if (msg_to_send != "") bot.sendMessage(msg.chat.id, msg_to_send);
-                        return {
-                            seq: "seq"+Math.random(),
+                        if (msg_to_send != "") return { 
+                            seq: bot.sendMessage(msg.chat.id, msg_to_send),
                             rand: Math.random()
-                        }
+                        };
                     },
-                    recallMsg: async () => {
+                    recallMsg: async (seq) => {
+                        bot.deleteMessage(msg.chat.id, seq);
                         bot.sendMessage(msg.chat.id, `抱歉：tg环境暂不支持撤回内容`);
                     }
                 },
