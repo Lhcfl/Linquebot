@@ -588,7 +588,7 @@ async function process_groupmsg(e) {
                         }
                         loves[e.sender.user_id].pat_date = t;
                     }
-                    else if (res.left.indexOf("老婆") !== -1 && loves[e.sender.user_id] >= 600) {
+                    else if (res.left.indexOf("老婆") !== -1 && loves[e.sender.user_id].data >= 600) {
                         msg_say(e, "www 也揉揉贴贴蹭蹭老婆的说", 1500);
                         const now = new Date();
                         const curlove = loves[e.sender.user_id];
